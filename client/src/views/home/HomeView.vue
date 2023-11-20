@@ -31,7 +31,8 @@
       :is-fetching="isFetching"
       :is-no-content="!hasNextPage"
       no-content-message="No more posts!"
-      class="sm:max-h-[600px] max-h-[530px]"
+      class="sm:max-h-[600px]"
+      style="height: 60vh"
     >
       <PostComponent v-for="post in fetchedPosts" :key="post._id" :post="post" />
     </InfiniteScrollListComponent>

@@ -1,5 +1,5 @@
 <template>
-  <ModalComponent modal-id="search">
+  <ModalComponent :modal-id="isShort ? 'search-short' : 'search-main'">
     <template v-slot:modal-button>
       <div :class="`btn ${isShort ? 'w-full' : 'btn-wide'} text-xl p-2`">
         <v-icon name="md-personsearch" class="mt-1" />
