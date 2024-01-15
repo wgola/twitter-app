@@ -1,2 +1,5 @@
 node_modules
 .env
+
+src/certificate/cert.crt
+src/certificate/key.key

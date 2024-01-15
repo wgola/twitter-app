@@ -4,7 +4,7 @@ const {
   getPostByIdEndpoint,
   getPostsEndpoint,
   getPostCommentsEndpoint
-} = require('../controllers/postController');
+} = require('../controllers');
 
 const router = express.Router();
 

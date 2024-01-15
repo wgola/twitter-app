@@ -1,4 +1,4 @@
-const LOGGER = require('../config/logger');
+const { LOGGER } = require('../config');
 
 const loggingMiddleware = (req, _res, next) => {
   const message = {

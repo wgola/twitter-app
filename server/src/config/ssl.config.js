@@ -1,6 +1,8 @@
-require('dotenv').config();
-const fs = require('fs');
+const dotenv = require('dotenv');
 const path = require('path');
+const fs = require('fs');
+
+dotenv.config();
 
 const options = {
   key: fs.readFileSync(path.resolve(__dirname, '../certificate/key.key')),

@@ -1,7 +1,5 @@
 const https = require('https');
-const { connectToDb } = require('./config/dbConnection');
-const options = require('./config/certificate');
-const LOGGER = require('./config/logger');
+const { connectToDb, LOGGER, sslOptions } = require('./config');
 const app = require('./app');
 
 const main = async () => {
@@ -10,8 +8,8 @@ const main = async () => {
   if (isConnectedToDb) {
     const PORT = process.env.PORT || 8080;
 
-    const server = https.createServer(options, app);
-    server.listen(PORT, () => LOGGER.info(`App is listenning on port ${PORT}`));
+    const server = https.createServer(sslOptions, app);
+    server.listen(PORT, () => LOGGER.info(`App is listenning on: 'https://localhost:${PORT}'`));
   }
 };
 

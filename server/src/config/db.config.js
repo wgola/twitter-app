@@ -1,7 +1,8 @@
-require('dotenv').config();
-
 const mongoose = require('mongoose');
-const LOGGER = require('./logger');
+const dotenv = require('dotenv');
+const LOGGER = require('./logger.config');
+
+dotenv.config();
 
 const MONGO_HOST = process.env.MONGO_HOST;
 const MONGO_PORT = process.env.MONGO_PORT;
