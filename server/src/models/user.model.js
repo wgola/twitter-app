@@ -10,7 +10,8 @@ const userSchema = new Schema({
   username: {
     type: String,
     unique: true,
-    required: true
+    required: true,
+    trim: true
   },
   password: {
     type: String,
@@ -18,11 +19,17 @@ const userSchema = new Schema({
   },
   firstname: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   surname: {
     type: String,
-    required: true
+    required: true,
+    trim: true
+  },
+  profilePictureUrl: {
+    type: String,
+    default: null
   },
   description: {
     type: String,

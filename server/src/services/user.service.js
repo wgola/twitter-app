@@ -2,13 +2,13 @@ const bcrypt = require('bcrypt');
 const { LOGGER } = require('../config');
 const { User } = require('../models');
 
-const createUser = async (username, password, firstname, lastname) => {
+const createUser = async (username, password, firstname, surname) => {
   try {
     const user = {
       username,
       password: bcrypt.hashSync(password, 8),
       firstname,
-      lastname
+      surname
     };
 
     const createdUser = await User.create(user);

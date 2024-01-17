@@ -31,7 +31,11 @@ const strategy = async (username, password, done) => {
 
     const user_information = {
       id: user._id,
-      username: user.username
+      username: user.username,
+      firstname: user.firstname,
+      surname: user.surname,
+      profilePictureUrl: user.profilePictureUrl,
+      description: user.description
     };
 
     return done(null, user_information);

@@ -8,27 +8,35 @@ const {
 
 const mongoosePaginate = require('mongoose-paginate-v2');
 
-const postSchema = new Schema({
-  authorId: {
-    type: ObjectId,
-    required: true,
-    immutable: true
+const postSchema = new Schema(
+  {
+    authorId: {
+      type: ObjectId,
+      required: true,
+      immutable: true
+    },
+    parentPostId: {
+      type: ObjectId,
+      immutable: true
+    },
+    citedPostId: {
+      type: ObjectId,
+      immutable: true
+    },
+    content: {
+      type: String,
+      required: true,
+      trim: true,
+      max: 255
+    },
+    likes: [
+      {
+        type: ObjectId
+      }
+    ]
   },
-  parentPostId: {
-    type: ObjectId,
-    immutable: true
-  },
-  citedPostId: {
-    type: ObjectId,
-    immutable: true
-  },
-  content: {
-    type: String,
-    required: true,
-    trim: true,
-    max: 255
-  }
-});
+  { timestamps: true }
+);
 
 postSchema.plugin(mongoosePaginate);
 

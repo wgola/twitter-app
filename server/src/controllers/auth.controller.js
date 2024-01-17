@@ -1,17 +1,12 @@
 const { createUser } = require('../services');
 
-const afterLoginEndpoint = (req, res) => {
-  res.status(200).json({
-    id: req.user.id,
-    username: req.user.username,
-    firstname: req.user.firstname,
-    surname: req.user.surname
-  });
+const getCurrentUserEndpoint = (req, res) => {
+  res.status(200).json(req.user);
 };
 
 const registerUserEndpoint = async (req, res) => {
   try {
-    await createUser(req.body.username, req.body.password, req.body.firstname, req.body.lastname);
+    await createUser(req.body.username, req.body.password, req.body.firstname, req.body.surname);
 
     res.status(201).json({ message: 'User registered succesfully' });
   } catch (err) {
@@ -33,7 +28,7 @@ const logoutEndpoint = (req, res) => {
 };
 
 module.exports = {
-  afterLoginEndpoint,
+  getCurrentUserEndpoint,
   registerUserEndpoint,
   logoutEndpoint
 };
