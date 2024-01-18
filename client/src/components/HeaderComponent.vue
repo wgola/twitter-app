@@ -57,7 +57,7 @@
           class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-300 rounded-box w-52"
           v-if="isLoggedIn"
         >
-          <li><RouterLink to="/profile">Profile</RouterLink></li>
+          <li><RouterLink :to="`/profile/${userData.username}`">Profile</RouterLink></li>
           <li><button @click="logOut">Logout</button></li>
         </ul>
         <ul
@@ -82,7 +82,7 @@ import { useUserStore } from '@/stores';
 const store = useUserStore();
 const router = useRouter();
 
-const { userData } = storeToRefs(store);
+const { userData, isUserAuthenticating } = storeToRefs(store);
 
 const isLoggedIn = ref(false);
 
@@ -91,8 +91,10 @@ onMounted(() => {
 });
 
 const logOut = async () => {
+  isUserAuthenticating.value = true;
   await logOutUser();
   store.clearUserData();
+  isUserAuthenticating.value = false;
   isLoggedIn.value = false;
   router.push('/');
 };

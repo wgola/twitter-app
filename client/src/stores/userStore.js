@@ -5,6 +5,7 @@ import { checkUserLoggedIn } from '@/services';
 
 export const useUserStore = defineStore('userStore', () => {
   const user = ref({});
+  const isUserAuthenticating = ref(false);
 
   const userData = computed(() => user.value);
 
@@ -15,17 +16,20 @@ export const useUserStore = defineStore('userStore', () => {
       return true;
     }
 
+    isUserAuthenticating.value = true;
     const { error, data } = await checkUserLoggedIn();
 
     if (error) {
+      isUserAuthenticating.value = false;
       return false;
     }
 
     saveUserData(data);
+    isUserAuthenticating.value = false;
     return true;
   };
 
   const clearUserData = () => (user.value = {});
 
-  return { user, userData, isUserLoggedIn, saveUserData, clearUserData };
+  return { user, userData, isUserLoggedIn, saveUserData, clearUserData, isUserAuthenticating };
 });

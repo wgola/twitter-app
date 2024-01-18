@@ -38,10 +38,32 @@ const routes = [
     beforeEnter: [checkUserAuthorized]
   },
   {
-    path: '/profile',
+    path: '/profile/:username',
     name: 'profile',
     component: () => import('@/views/profile/ProfileView.vue'),
-    beforeEnter: [checkUserAuthorized]
+    beforeEnter: [checkUserAuthorized],
+    children: [
+      {
+        path: '/profile/:username/posts',
+        name: 'userPosts',
+        component: () => import('@/components/profile/UserPostsComponent.vue')
+      },
+      {
+        path: '/profile/:username/likes',
+        name: 'userLikes',
+        component: () => import('@/components/profile/UserLikesComponent.vue')
+      },
+      {
+        path: '/profile/:username/following',
+        name: 'userFollowing',
+        component: () => import('@/components/profile/UserFollowingComponent.vue')
+      },
+      {
+        path: '/profile/:username/followers',
+        name: 'userFollowers',
+        component: () => import('@/components/profile/UserFollowersComponent.vue')
+      }
+    ]
   }
 ];
 

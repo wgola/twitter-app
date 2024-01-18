@@ -1,11 +1,11 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { OhVueIcon, addIcons } from 'oh-vue-icons';
-import { CoHome } from 'oh-vue-icons/icons';
+import { CoHome, MdDaterangeTwotone } from 'oh-vue-icons/icons';
 import App from './App.vue';
 import router from './router';
 
-addIcons(CoHome);
+addIcons(CoHome, MdDaterangeTwotone);
 
 const app = createApp(App);
 

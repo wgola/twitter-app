@@ -1,5 +1,5 @@
 <template>
-  <div class="hero">
+  <div class="hero mt-36">
     <div class="hero-content flex-col lg:flex-row">
       <img src="../assets/logo.svg" class="max-w-sm rounded-lg" />
       <div>
