@@ -9,14 +9,14 @@ const registerUserEndpoint = async (req, res) => {
     await createUser(req.body.username, req.body.password, req.body.firstname, req.body.surname);
 
     res.status(201).json({ message: 'User registered succesfully' });
-  } catch (err) {
-    res.status(422).json({ message: err });
+  } catch (error) {
+    res.status(422).json({ message: error.message });
   }
 };
 
 const logoutEndpoint = (req, res) => {
-  req.logout((err) => {
-    if (err) {
+  req.logout((error) => {
+    if (error) {
       res.status(500).json({ message: 'Error logging out' });
     } else {
       res.status(200).clearCookie('connect.sid');

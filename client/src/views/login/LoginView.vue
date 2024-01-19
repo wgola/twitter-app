@@ -30,12 +30,13 @@ import validationSchema from './loginValidation';
 import { InputComponent } from '@/components';
 import { ref } from 'vue';
 import { useUserStore } from '@/stores';
-import { logInUser } from '@/services';
 import { useRouter } from 'vue-router';
 
 const { handleSubmit, isSubmitting } = useForm({ validationSchema });
 const store = useUserStore();
 const router = useRouter();
+
+const { logInUser } = store;
 
 const loginError = ref('');
 
@@ -44,12 +45,11 @@ const onSubmit = handleSubmit(async (values) => {
 
   const result = await logInUser(values);
 
-  if (result.error) {
-    loginError.value = 'Error logging in - invalid username or password!';
+  if (result) {
+    router.push('/home');
     return;
   }
 
-  store.saveUserData(result.data);
-  router.push('/home');
+  loginError.value = 'Error logging in - invalid username or password!';
 });
 </script>

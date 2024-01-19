@@ -33,8 +33,8 @@ import { RouterLink } from 'vue-router';
 import { useForm } from 'vee-validate';
 import { ref } from 'vue';
 import validationSchema from './registrationValidation';
+import { registerUserRequest } from '@/services';
 import { InputComponent } from '@/components';
-import { registerUser } from '@/services';
 
 const { handleSubmit, isSubmitting } = useForm({ validationSchema });
 
@@ -51,7 +51,7 @@ const onSubmit = handleSubmit(async ({ username, password, firstname, surname })
 
   const user = { username, password, firstname, surname };
 
-  const result = await registerUser(user);
+  const result = await registerUserRequest(user);
 
   if (result.error) {
     registeringMessage.value = {

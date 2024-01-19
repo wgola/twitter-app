@@ -4,9 +4,10 @@ const passport = require('passport');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 const { localStrategy, serialization, deserialization } = require('./config');
 const { authorizationMiddleware, loggingMiddleware, sessionMiddleware } = require('./middlewares');
-const { postsRouter, authRouter } = require('./routes');
+const { postsRouter, authRouter, userRouter } = require('./routes');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: 'https://localhost:5173' }));
 app.use(helmet());
 app.use(cookieParser());
+app.use(fileUpload());
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
@@ -28,7 +30,9 @@ app.use('/api/posts', authorizationMiddleware, postsRouter);
 
 app.use('/api/auth', authRouter);
 
-app.get('/api', (req, res) => {
+app.use('/api/user', authorizationMiddleware, userRouter);
+
+app.get('/api', (_req, res) => {
   res.json({ msg: 'Y API v1' });
 });
 

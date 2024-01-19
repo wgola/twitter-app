@@ -1,3 +1,23 @@
-import { registerUser, logInUser, checkUserLoggedIn, logOutUser } from './authService';
+import {
+  registerUserRequest,
+  logInUserRequest,
+  checkUserLoggedInRequest,
+  logOutUserRequest
+} from './auth.service';
+import {
+  updateProfilePictureRequest,
+  updateUserDataRequest,
+  getUserDetailsByUsername,
+  changeFollowingUserRequest
+} from './user.service';
 
-export { registerUser, logInUser, checkUserLoggedIn, logOutUser };
+export {
+  registerUserRequest,
+  logInUserRequest,
+  checkUserLoggedInRequest,
+  logOutUserRequest,
+  updateProfilePictureRequest,
+  updateUserDataRequest,
+  getUserDetailsByUsername,
+  changeFollowingUserRequest
+};

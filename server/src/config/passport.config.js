@@ -1,14 +1,16 @@
 const passportLocal = require('passport-local');
 const bcrypt = require('bcrypt');
 const { User } = require('../models');
+const { getUserDetails } = require('../services/user.service');
 
 const serialization = (user, done) => {
-  done(null, user.id);
+  done(null, user.username);
 };
 
-const deserialization = async (id, done) => {
+const deserialization = async (username, done) => {
   try {
-    const user = await User.findById(id);
+    const user = await getUserDetails(username, username);
+
     done(null, user);
   } catch (err) {
     done(err, null);
@@ -29,14 +31,7 @@ const strategy = async (username, password, done) => {
       return done(null, false, { message: 'Incorrect password' });
     }
 
-    const user_information = {
-      id: user._id,
-      username: user.username,
-      firstname: user.firstname,
-      surname: user.surname,
-      profilePictureUrl: user.profilePictureUrl,
-      description: user.description
-    };
+    const user_information = await getUserDetails(user.username, user.username);
 
     return done(null, user_information);
   } catch (err) {

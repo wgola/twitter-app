@@ -1,16 +1,29 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import { useUserStore } from '@/stores';
+import { storeToRefs } from 'pinia';
 
 const checkUserAuthorized = async () => {
   const store = useUserStore();
+  const { checkUserStatus } = store;
+  const { isUserLoggedIn, isUserChecked } = storeToRefs(store);
 
-  return (await store.isUserLoggedIn()) || '/login';
+  if (!isUserChecked.value) {
+    await checkUserStatus();
+  }
+
+  return isUserLoggedIn.value || '/login';
 };
 
 const checkUserLoggedIn = async () => {
   const store = useUserStore();
+  const { checkUserStatus } = store;
+  const { isUserLoggedIn, isUserChecked } = storeToRefs(store);
 
-  return !(await store.isUserLoggedIn()) || '/home';
+  if (!isUserChecked.value) {
+    await checkUserStatus();
+  }
+
+  return !isUserLoggedIn.value || '/home';
 };
 
 const routes = [
@@ -46,22 +59,22 @@ const routes = [
       {
         path: '/profile/:username/posts',
         name: 'userPosts',
-        component: () => import('@/components/profile/UserPostsComponent.vue')
+        component: () => import('@/views/profile/UserPostsListView.vue')
       },
       {
         path: '/profile/:username/likes',
         name: 'userLikes',
-        component: () => import('@/components/profile/UserLikesComponent.vue')
+        component: () => import('@/views/profile/UserLikesListView.vue')
       },
       {
         path: '/profile/:username/following',
         name: 'userFollowing',
-        component: () => import('@/components/profile/UserFollowingComponent.vue')
+        component: () => import('@/views/profile/UserFollowingListView.vue')
       },
       {
         path: '/profile/:username/followers',
         name: 'userFollowers',
-        component: () => import('@/components/profile/UserFollowersComponent.vue')
+        component: () => import('@/views/profile/UserFollowersListView.vue')
       }
     ]
   }

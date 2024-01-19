@@ -2,7 +2,7 @@
   <div class="flex flex-col h-screen">
     <HeaderComponent />
     <div class="grow">
-      <LoadingComponent v-if="isUserAuthenticating" class="mt-52" />
+      <LoadingComponent v-if="isChangingUserStatus" class="mt-52" />
       <RouterView v-else />
     </div>
     <FooterComponent />
@@ -11,10 +11,10 @@
 
 <script setup>
 import { RouterView } from 'vue-router';
-import { HeaderComponent, FooterComponent, LoadingComponent } from '@/components';
-import { useUserStore } from './stores';
 import { storeToRefs } from 'pinia';
+import { HeaderComponent, FooterComponent, LoadingComponent } from '@/components';
+import { useUserStore } from '@/stores';
 
 const store = useUserStore();
-const { isUserAuthenticating } = storeToRefs(store);
+const { isChangingUserStatus } = storeToRefs(store);
 </script>

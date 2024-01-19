@@ -44,20 +44,16 @@
           <div class="w-10 rounded-full">
             <img
               alt="profilePicture"
-              :src="
-                isLoggedIn && store.userData.profilePictureUrl
-                  ? store.userData.profilePictureUrl
-                  : '/src/assets/avatar.png'
-              "
+              :src="currentUserData.profilePictureUrl || '/src/assets/avatar.png'"
             />
           </div>
         </div>
         <ul
           tabindex="0"
           class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-300 rounded-box w-52"
-          v-if="isLoggedIn"
+          v-if="isUserLoggedIn"
         >
-          <li><RouterLink :to="`/profile/${userData.username}`">Profile</RouterLink></li>
+          <li><RouterLink :to="`/profile/${currentUserData.username}`">Profile</RouterLink></li>
           <li><button @click="logOut">Logout</button></li>
         </ul>
         <ul
@@ -74,32 +70,25 @@
 
 <script setup>
 import { RouterLink, useRouter } from 'vue-router';
-import { onMounted, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
-import { logOutUser } from '@/services';
+import { onMounted } from 'vue';
 import { useUserStore } from '@/stores';
 
 const store = useUserStore();
 const router = useRouter();
 
-const { userData, isUserAuthenticating } = storeToRefs(store);
-
-const isLoggedIn = ref(false);
+const { currentUserData, isUserLoggedIn } = storeToRefs(store);
+const { checkUserStatus, logOutUser } = store;
 
 onMounted(() => {
-  store.isUserLoggedIn();
+  checkUserStatus();
 });
 
 const logOut = async () => {
-  isUserAuthenticating.value = true;
-  await logOutUser();
-  store.clearUserData();
-  isUserAuthenticating.value = false;
-  isLoggedIn.value = false;
-  router.push('/');
-};
+  const result = await logOutUser();
 
-watch(userData, async () => {
-  isLoggedIn.value = await store.isUserLoggedIn();
-});
+  if (result) {
+    router.push('/');
+  }
+};
 </script>

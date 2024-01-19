@@ -1,16 +1,12 @@
-const {
-  Schema,
-  Schema: {
-    Types: { ObjectId }
-  },
-  model
-} = require('mongoose');
+const { Schema, model } = require('mongoose');
+var aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const userSchema = new Schema(
   {
     username: {
       type: String,
       unique: true,
+      immutable: true,
       required: true,
       trim: true
     },
@@ -28,22 +24,31 @@ const userSchema = new Schema(
       required: true,
       trim: true
     },
-    profilePictureUrl: {
-      type: String,
-      default: null
+    profilePicture: {
+      url: {
+        type: String,
+        default: null
+      },
+      id: {
+        type: String,
+        default: null
+      }
     },
     description: {
       type: String,
       max: 100,
-      trim: true
+      trim: true,
+      default: ''
     },
     follows: [
       {
-        type: ObjectId
+        type: String
       }
     ]
   },
   { timestamps: true }
 );
+
+userSchema.plugin(aggregatePaginate);
 
 module.exports = model('User', userSchema);

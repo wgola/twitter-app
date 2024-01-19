@@ -1,35 +1,101 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import _ from 'lodash';
-import { checkUserLoggedIn } from '@/services';
+import {
+  checkUserLoggedInRequest,
+  logInUserRequest,
+  logOutUserRequest,
+  updateProfilePictureRequest,
+  updateUserDataRequest
+} from '@/services';
 
 export const useUserStore = defineStore('userStore', () => {
-  const user = ref({});
-  const isUserAuthenticating = ref(false);
+  const currentUser = ref({});
+  const isChangingUserStatus = ref(false);
+  const isUserChecked = ref(false);
 
-  const userData = computed(() => user.value);
+  const currentUserData = computed(() => currentUser.value);
 
-  const saveUserData = (newUserData) => (user.value = newUserData);
+  const isUserLoggedIn = computed(() => !_.isEmpty(currentUser.value));
 
-  const isUserLoggedIn = async () => {
-    if (!_.isEmpty(user.value)) {
-      return true;
+  const checkUserStatus = async () => {
+    if (isUserLoggedIn.value) {
+      return;
     }
 
-    isUserAuthenticating.value = true;
-    const { error, data } = await checkUserLoggedIn();
+    isChangingUserStatus.value = true;
+    const { error, data } = await checkUserLoggedInRequest();
 
     if (error) {
-      isUserAuthenticating.value = false;
+      isChangingUserStatus.value = false;
+      isUserChecked.value = true;
+      return;
+    }
+
+    currentUser.value = data;
+    isChangingUserStatus.value = false;
+    isUserChecked.value = true;
+  };
+
+  const logInUser = async (loginData) => {
+    const { error, data } = await logInUserRequest(loginData);
+
+    if (error) {
       return false;
     }
 
-    saveUserData(data);
-    isUserAuthenticating.value = false;
+    currentUser.value = data;
     return true;
   };
 
-  const clearUserData = () => (user.value = {});
+  const logOutUser = async () => {
+    isChangingUserStatus.value = true;
 
-  return { user, userData, isUserLoggedIn, saveUserData, clearUserData, isUserAuthenticating };
+    const { error } = await logOutUserRequest();
+
+    if (error) {
+      return false;
+    }
+
+    currentUser.value = {};
+    isChangingUserStatus.value = false;
+    return true;
+  };
+
+  const updateProfilePicture = async (profilePicture) => {
+    const { data, error } = await updateProfilePictureRequest(profilePicture);
+
+    if (error) {
+      return false;
+    }
+
+    currentUser.value.profilePictureUrl = data;
+    return true;
+  };
+
+  const updateUserData = async (userData) => {
+    const { error } = await updateUserDataRequest(userData);
+
+    if (error) {
+      return false;
+    }
+
+    currentUser.value.firstname = userData.firstname;
+    currentUser.value.surname = userData.surname;
+    currentUser.value.description = userData.description;
+    return true;
+  };
+
+  return {
+    currentUser,
+    isUserChecked,
+    isChangingUserStatus,
+    isUserLoggedIn,
+    currentUserData,
+    checkUserStatus,
+    logInUser,
+    logOutUser,
+    updateProfilePicture,
+    updateUserData
+  };
 });

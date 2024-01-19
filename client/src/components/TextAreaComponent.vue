@@ -3,11 +3,10 @@
     <label :for="name" v-if="label" class="text-center text-xl font-bold uppercase">
       {{ label }}
     </label>
-    <input
+    <textarea
       :name="name"
       v-model="value"
-      :type="type"
-      class="input input-bordered"
+      class="textarea textarea-bordered"
       :disabled="disabled"
     />
     <p class="h-8 text-error italic text-center m-1">{{ errorMessage }}</p>
@@ -24,10 +23,6 @@ const props = defineProps({
   },
   label: {
     type: String
-  },
-  type: {
-    type: String,
-    default: 'text'
   },
   disabled: {
     type: Boolean,
