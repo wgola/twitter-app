@@ -4,7 +4,8 @@ const {
   getUserGeneralDataEndpoint,
   updateUserDataEndpoint,
   changeFollowingUserEndpoint,
-  getUserFollowersEndpoint
+  getUserFollowersEndpoint,
+  getUserFollowingEndpoint
 } = require('../controllers');
 
 const express = require('express');
@@ -22,5 +23,7 @@ router.put('/data', updateUserDataEndpoint);
 router.put('/:username/follow', changeFollowingUserEndpoint);
 
 router.get('/:username/followers', getUserFollowersEndpoint);
+
+router.get('/:username/following', getUserFollowingEndpoint);
 
 module.exports = router;

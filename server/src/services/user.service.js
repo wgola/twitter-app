@@ -177,6 +177,41 @@ const getUserFollowers = async (username, page, limit) => {
   }
 };
 
+const getUserFollowing = async (username, page, limit) => {
+  try {
+    const followingAggregate = User.aggregate([
+      { $match: { username } },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'follows',
+          foreignField: 'username',
+          as: 'following'
+        }
+      },
+      {
+        $unwind: '$following'
+      },
+      {
+        $project: {
+          _id: '$following._id',
+          username: '$following.username',
+          firstname: '$following.firstname',
+          surname: '$following.surname',
+          profilePictureUrl: '$following.profilePicture.url'
+        }
+      }
+    ]);
+
+    return await User.aggregatePaginate(followingAggregate, {
+      page: page,
+      limit: limit
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   createUser,
   updateProfilePicture,
@@ -184,5 +219,6 @@ module.exports = {
   getUserGeneralData,
   updateUserData,
   changeFollowingUser,
-  getUserFollowers
+  getUserFollowers,
+  getUserFollowing
 };

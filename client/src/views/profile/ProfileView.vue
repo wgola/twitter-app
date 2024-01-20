@@ -1,5 +1,6 @@
 <template>
   <LoadingComponent v-if="isLoading" class="mt-52" />
+  <NoContentComponent v-else-if="userNotFound" message="User not found!" class="mx-auto mt-36" />
   <div v-else>
     <div class="mx-auto w-2/3">
       <div class="avatar">
@@ -37,12 +38,26 @@
     </div>
     <div class="bg-base-200 rounded-box flex justify-center">
       <ul class="menu menu-vertical lg:menu-horizontal gap-5">
-        <RouterLink :to="`/profile/${profileData.username}/posts`" class="btn">Posts</RouterLink>
-        <RouterLink :to="`/profile/${profileData.username}/likes`" class="btn">Likes</RouterLink>
-        <RouterLink :to="`/profile/${profileData.username}/following`" class="btn">
+        <RouterLink
+          :to="`/profile/${profileData.username}/posts`"
+          :class="`${currentComponentName === 'userPosts' && 'border-b-2 border-accent'} btn`"
+          >Posts</RouterLink
+        >
+        <RouterLink
+          :to="`/profile/${profileData.username}/likes`"
+          :class="`${currentComponentName === 'userLikes' && 'border-b-2 border-accent'} btn`"
+          >Likes</RouterLink
+        >
+        <RouterLink
+          :to="`/profile/${profileData.username}/following`"
+          :class="`${currentComponentName === 'userFollowing' && 'border-b-2 border-accent'} btn`"
+        >
           Following
         </RouterLink>
-        <RouterLink :to="`/profile/${profileData.username}/followers`" class="btn">
+        <RouterLink
+          :to="`/profile/${profileData.username}/followers`"
+          :class="`${currentComponentName === 'userFollowers' && 'border-b-2 border-accent'} btn`"
+        >
           Followers
         </RouterLink>
       </ul>
@@ -58,7 +73,7 @@ import { ref, watch } from 'vue';
 import { getUserDetailsByUsername, changeFollowingUserRequest } from '@/services';
 import EditUserDataButton from './editUserData/EditUserDataView.vue';
 import EditAvatarButton from './editAvatar/EditAvatarView.vue';
-import { LoadingComponent } from '@/components';
+import { LoadingComponent, NoContentComponent } from '@/components';
 import { useUserStore } from '@/stores';
 
 const route = useRoute();
@@ -66,26 +81,43 @@ const store = useUserStore();
 
 const { currentUserData } = storeToRefs(store);
 
+const userNotFound = ref(false);
 const isCurrentUser = ref(false);
 const isLoading = ref(true);
 let profileData = {};
 
+const currentComponentName = ref('');
+
 watch(
   () => route.params.username,
   async (newUsername) => {
+    userNotFound.value = false;
     isLoading.value = true;
 
     if (newUsername === currentUserData.value.username) {
       profileData = currentUserData;
       isCurrentUser.value = true;
     } else {
-      const { data } = await getUserDetailsByUsername(newUsername);
-      profileData = ref(data);
-      console.log(profileData.value);
-      isCurrentUser.value = false;
+      const { data, error } = await getUserDetailsByUsername(newUsername);
+
+      if (error) {
+        userNotFound.value = true;
+      } else {
+        profileData = ref(data);
+
+        isCurrentUser.value = false;
+      }
     }
 
     isLoading.value = false;
+  },
+  { immediate: true }
+);
+
+watch(
+  () => route.name,
+  (newRouteName) => {
+    currentComponentName.value = newRouteName;
   },
   { immediate: true }
 );

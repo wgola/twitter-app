@@ -6,12 +6,13 @@ import {
   MdDaterangeTwotone,
   FaRegularEdit,
   HiHeart,
-  HiSolidHeart
+  HiSolidHeart,
+  MdNosimOutlined
 } from 'oh-vue-icons/icons';
 import App from './App.vue';
 import router from './router';
 
-addIcons(CoHome, MdDaterangeTwotone, FaRegularEdit, HiHeart, HiSolidHeart);
+addIcons(CoHome, MdDaterangeTwotone, FaRegularEdit, HiHeart, HiSolidHeart, MdNosimOutlined);
 
 const app = createApp(App);
 

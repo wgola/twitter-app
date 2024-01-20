@@ -8,7 +8,9 @@ import {
   updateProfilePictureRequest,
   updateUserDataRequest,
   getUserDetailsByUsername,
-  changeFollowingUserRequest
+  changeFollowingUserRequest,
+  getUserFollowersRequest,
+  getUserFollowingsRequest
 } from './user.service';
 
 export {
@@ -19,5 +21,7 @@ export {
   updateProfilePictureRequest,
   updateUserDataRequest,
   getUserDetailsByUsername,
-  changeFollowingUserRequest
+  changeFollowingUserRequest,
+  getUserFollowersRequest,
+  getUserFollowingsRequest
 };

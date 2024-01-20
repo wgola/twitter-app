@@ -3,5 +3,15 @@ import HeaderComponent from './HeaderComponent.vue';
 import FooterComponent from './FooterComponent.vue';
 import LoadingComponent from './LoadingComponent.vue';
 import TextAreaComponent from './TextAreaComponent.vue';
+import ShortUserComponent from './profile/ShortUserComponent.vue';
+import NoContentComponent from './profile/NoContentComponent.vue';
 
-export { InputComponent, HeaderComponent, FooterComponent, LoadingComponent, TextAreaComponent };
+export {
+  InputComponent,
+  HeaderComponent,
+  FooterComponent,
+  LoadingComponent,
+  TextAreaComponent,
+  ShortUserComponent,
+  NoContentComponent
+};

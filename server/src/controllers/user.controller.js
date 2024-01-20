@@ -4,7 +4,8 @@ const {
   getUserGeneralData,
   updateUserData,
   changeFollowingUser,
-  getUserFollowers
+  getUserFollowers,
+  getUserFollowing
 } = require('../services');
 
 const updateProfilePictureEndpoint = async (req, res) => {
@@ -74,11 +75,26 @@ const getUserFollowersEndpoint = async (req, res) => {
   }
 };
 
+const getUserFollowingEndpoint = async (req, res) => {
+  try {
+    const foundFollowings = await getUserFollowing(
+      req.params.username,
+      req.query.page,
+      req.query.limit
+    );
+
+    res.status(200).json(foundFollowings);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 module.exports = {
   updateProfilePictureEndpoint,
   getUserDetailsEndpoint,
   getUserGeneralDataEndpoint,
   updateUserDataEndpoint,
   changeFollowingUserEndpoint,
-  getUserFollowersEndpoint
+  getUserFollowersEndpoint,
+  getUserFollowingEndpoint
 };

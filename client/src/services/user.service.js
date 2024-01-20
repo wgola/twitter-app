@@ -31,3 +31,17 @@ export const changeFollowingUserRequest = async (username) => {
 
   return await wrapper(request);
 };
+
+export const getUserFollowersRequest = async (username, page) => {
+  const request = async () =>
+    await apiClient.get(`/api/user/${username}/followers?page=${page}&limit=15`);
+
+  return await wrapper(request);
+};
+
+export const getUserFollowingsRequest = async (username, page) => {
+  const request = async () =>
+    await apiClient.get(`/api/user/${username}/following?page=${page}&limit=15`);
+
+  return await wrapper(request);
+};
