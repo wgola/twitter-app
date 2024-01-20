@@ -24,7 +24,6 @@
     "imagekit": "^4.1.4",
     "mongoose": "^8.0.4",
     "mongoose-aggregate-paginate-v2": "^1.0.7",
-    "mongoose-paginate-v2": "^1.8.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "prettier": "^3.2.2",

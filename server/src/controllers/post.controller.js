@@ -16,7 +16,7 @@ const getPostsEndpoint = async (req, res) => {
   try {
     const page = req.query.page || 1;
 
-    const posts = await getPosts(page);
+    const posts = await getPosts(req.user.username, page);
 
     return res.status(200).json(posts);
   } catch (err) {

@@ -5,13 +5,12 @@ const {
   },
   model
 } = require('mongoose');
-
-const mongoosePaginate = require('mongoose-paginate-v2');
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const postSchema = new Schema(
   {
-    authorId: {
-      type: ObjectId,
+    authorUsername: {
+      type: String,
       required: true,
       immutable: true
     },
@@ -19,7 +18,7 @@ const postSchema = new Schema(
       type: ObjectId,
       immutable: true
     },
-    citedPostId: {
+    quotedPostId: {
       type: ObjectId,
       immutable: true
     },
@@ -31,13 +30,13 @@ const postSchema = new Schema(
     },
     likes: [
       {
-        type: ObjectId
+        type: String
       }
     ]
   },
   { timestamps: true }
 );
 
-postSchema.plugin(mongoosePaginate);
+postSchema.plugin(aggregatePaginate);
 
 module.exports = model('Post', postSchema);

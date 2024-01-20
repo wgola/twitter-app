@@ -7,12 +7,25 @@ import {
   FaRegularEdit,
   HiHeart,
   HiSolidHeart,
-  MdNosimOutlined
+  MdNosimOutlined,
+  FaComments,
+  BiChatQuoteFill,
+  HiLink
 } from 'oh-vue-icons/icons';
 import App from './App.vue';
 import router from './router';
 
-addIcons(CoHome, MdDaterangeTwotone, FaRegularEdit, HiHeart, HiSolidHeart, MdNosimOutlined);
+addIcons(
+  CoHome,
+  MdDaterangeTwotone,
+  FaRegularEdit,
+  HiHeart,
+  HiSolidHeart,
+  MdNosimOutlined,
+  FaComments,
+  BiChatQuoteFill,
+  HiLink
+);
 
 const app = createApp(App);
 
