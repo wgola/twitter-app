@@ -12,7 +12,7 @@ import {
   getUserFollowersRequest,
   getUserFollowingsRequest
 } from './user.service';
-import { createPostRequest, getMainPostsRequest } from './post.service';
+import { createPostRequest, getMainPostsRequest, getPostByIdRequest } from './post.service';
 
 export {
   registerUserRequest,
@@ -26,5 +26,6 @@ export {
   getUserFollowersRequest,
   getUserFollowingsRequest,
   createPostRequest,
-  getMainPostsRequest
+  getMainPostsRequest,
+  getPostByIdRequest
 };

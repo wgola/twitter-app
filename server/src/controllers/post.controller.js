@@ -1,4 +1,4 @@
-const { getPosts, getPostById, getComments, createPost } = require('../services');
+const { getPosts, getPostById, getPostComments, createPost } = require('../services');
 
 const getPostByIdEndpoint = async (req, res) => {
   try {
@@ -29,7 +29,7 @@ const getPostCommentsEndpoint = async (req, res) => {
     const postId = req.params.postId;
     const page = req.query.page || 1;
 
-    const posts = await getComments(postId, page);
+    const posts = await getPostComments(postId, page);
 
     return res.status(200).json(posts);
   } catch (err) {

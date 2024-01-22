@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import _ from 'lodash';
 
-export const useMainPagePosts = defineStore('mainPageStore', () => {
+export const useMainPageStore = defineStore('mainPageStore', () => {
   const fetchedPosts = ref([]);
   const currentPage = ref(1);
   const hasNextPage = ref(true);

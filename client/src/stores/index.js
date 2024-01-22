@@ -1,4 +1,5 @@
 import { useUserStore } from './userStore';
-import { useMainPagePosts } from './mainPagePosts';
+import { useMainPageStore } from './mainPageStore';
+import { useThreadPageStore } from './threadPageStore';
 
-export { useUserStore, useMainPagePosts };
+export { useUserStore, useMainPageStore, useThreadPageStore };

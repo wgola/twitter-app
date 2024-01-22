@@ -25,10 +25,10 @@
 import PostFormView from './postForm/PostFormView.vue';
 import { vInfiniteScroll } from '@vueuse/components';
 import { LoadingComponent, NoContentComponent, PostComponent } from '@/components';
-import { useMainPagePosts } from '@/stores';
+import { useMainPageStore } from '@/stores';
 import { storeToRefs } from 'pinia';
 
-const store = useMainPagePosts();
+const store = useMainPageStore();
 
 const { loadMorePosts, refresh } = store;
 

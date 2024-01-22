@@ -26,7 +26,7 @@ import { ref } from 'vue';
 import { TextAreaComponent, ModalComponent } from '@/components';
 import validationSchema from './formValidation';
 import { createPostRequest } from '@/services';
-import { useUserStore, useMainPagePosts } from '@/stores';
+import { useUserStore, useMainPageStore, useThreadPageStore } from '@/stores';
 import QuotedPostComponent from '@/components/post/QuotedPostComponent.vue';
 
 const { parentPostId, quotedPost, modalId } = defineProps({
@@ -45,9 +45,11 @@ const { parentPostId, quotedPost, modalId } = defineProps({
 });
 
 const userStore = useUserStore();
-const mainPagePostsStore = useMainPagePosts();
+const mainPagePostsStore = useMainPageStore();
+const threadPageStore = useThreadPageStore();
 
 const { addPost } = mainPagePostsStore;
+const { addComment } = threadPageStore;
 const { currentUserData } = storeToRefs(userStore);
 
 const errorMessage = ref('');
@@ -68,7 +70,12 @@ const onSubmit = handleSubmit(async (values) => {
     return;
   }
 
-  addPost(data);
+  if (parentPostId) {
+    addComment(data);
+  } else {
+    addPost(data);
+  }
+
   document.getElementById(modalId).close();
 });
 </script>

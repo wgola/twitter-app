@@ -12,3 +12,15 @@ export const getMainPostsRequest = async (page) => {
 
   return await wrapper(request);
 };
+
+export const getPostByIdRequest = async (postId) => {
+  const request = async () => await apiClient.get(`/api/posts/${postId}`);
+
+  return await wrapper(request);
+};
+
+export const getPostCommentsRequest = async (postId, page) => {
+  const request = async () => await apiClient.get(`/api/posts/${postId}/comments?page=${page}`);
+
+  return await wrapper(request);
+};
