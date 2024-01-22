@@ -29,7 +29,7 @@
         </div>
         <EditUserDataButton v-if="isCurrentUser" />
         <button v-if="!isCurrentUser" class="btn btn-accent uppercase" @click="onFollowClick">
-          <span v-if="profileData.isFollowed"
+          <span v-if="isUserFollowed"
             ><v-icon name="hi-solid-heart" class="h-6 w-6 mx-1" />Unfollow</span
           >
           <span v-else><v-icon name="hi-heart" class="h-6 w-6 mx-1" />Follow</span>
@@ -72,20 +72,22 @@ import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
 import { getUserDetailsByUsername, changeFollowingUserRequest } from '@/services';
 import EditUserDataButton from './editUserData/EditUserDataView.vue';
-import EditAvatarButton from './editAvatar/EditAvatarView.vue';
 import { LoadingComponent, NoContentComponent } from '@/components';
+import EditAvatarButton from './editAvatar/EditAvatarView.vue';
 import { useUserStore } from '@/stores';
 
 const route = useRoute();
 const store = useUserStore();
 
 const { currentUserData } = storeToRefs(store);
+const { checkIfUserFollowed, followUser, unfollowUser } = store;
 
 const userNotFound = ref(false);
 const isCurrentUser = ref(false);
 const isLoading = ref(true);
 let profileData = {};
 
+const isUserFollowed = ref(false);
 const currentComponentName = ref('');
 
 watch(
@@ -100,6 +102,7 @@ watch(
     } else {
       const { data, error } = await getUserDetailsByUsername(newUsername);
 
+      isUserFollowed.value = checkIfUserFollowed(newUsername);
       if (error) {
         userNotFound.value = true;
       } else {
@@ -122,12 +125,19 @@ watch(
   { immediate: true }
 );
 
-const onFollowClick = async () => {
+const onFollowClick = () => {
   changeFollowingUserRequest(profileData.value.username);
 
-  profileData.value.isFollowed = !profileData.value.isFollowed;
+  isUserFollowed.value = !isUserFollowed.value;
 
-  profileData.value.followersCount += profileData.value.isFollowed ? 1 : -1;
-  store.currentUser.followingCount += profileData.value.isFollowed ? 1 : -1;
+  if (isUserFollowed.value) {
+    profileData.value.followersCount += 1;
+    store.currentUser.followingCount += 1;
+    followUser(profileData.value.username);
+  } else {
+    profileData.value.followersCount -= 1;
+    store.currentUser.followingCount -= 1;
+    unfollowUser(profileData.value.username);
+  }
 };
 </script>

@@ -1,35 +1,36 @@
 <template>
   <main>
-    <PostFormView />
+    <div class="flex w-fit gap-5 mx-auto mb-5">
+      <PostFormView modal-id="newPost">
+        <button class="btn btn-wide btn-accent uppercase">
+          <v-icon name="fa-regular-edit" />Add new post
+        </button>
+      </PostFormView>
+      <button @click="refresh" class="btn btn-wide btn-accent uppercase">
+        <v-icon name="hi-refresh" /> Refresh
+      </button>
+    </div>
     <div
       v-infinite-scroll="[loadMorePosts, { canLoadMore: () => hasNextPage, distance: 20 }]"
-      class="flex flex-col max-w-fit gap-5 m-5 mx-auto"
+      class="flex flex-col gap-5 max-w-fit h-[650px] mx-auto overflow-y-auto"
     >
-      <PostComponent v-for="post in posts" :key="post._id" :post="post" />
+      <PostComponent v-for="post in fetchedPosts" :key="post._id" :post="post" />
+      <LoadingComponent v-if="isFetching" />
+      <NoContentComponent v-if="!hasNextPage" message="No more posts!" class="mx-auto" />
     </div>
   </main>
 </template>
 
 <script setup>
 import PostFormView from './postForm/PostFormView.vue';
-import { ref } from 'vue';
 import { vInfiniteScroll } from '@vueuse/components';
-import { getMainPostsRequest } from '@/services';
-import { PostComponent } from '@/components';
+import { LoadingComponent, NoContentComponent, PostComponent } from '@/components';
+import { useMainPagePosts } from '@/stores';
+import { storeToRefs } from 'pinia';
 
-const posts = ref([]);
-const page = ref(1);
-const hasNextPage = ref(true);
+const store = useMainPagePosts();
 
-const loadMorePosts = async () => {
-  const { data, error } = await getMainPostsRequest(page.value);
+const { loadMorePosts, refresh } = store;
 
-  if (error) {
-    return;
-  }
-
-  posts.value = [...posts.value, ...data.docs];
-  hasNextPage.value = data.hasNextPage;
-  page.value++;
-};
+const { fetchedPosts, hasNextPage, isFetching } = storeToRefs(store);
 </script>

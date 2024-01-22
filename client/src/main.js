@@ -10,7 +10,8 @@ import {
   MdNosimOutlined,
   FaComments,
   BiChatQuoteFill,
-  HiLink
+  HiLink,
+  HiRefresh
 } from 'oh-vue-icons/icons';
 import App from './App.vue';
 import router from './router';
@@ -24,7 +25,8 @@ addIcons(
   MdNosimOutlined,
   FaComments,
   BiChatQuoteFill,
-  HiLink
+  HiLink,
+  HiRefresh
 );
 
 const app = createApp(App);

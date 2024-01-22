@@ -77,6 +77,12 @@ const routes = [
         component: () => import('@/views/profile/UserFollowersListView.vue')
       }
     ]
+  },
+  {
+    path: '/thread/:threadId',
+    name: 'thread',
+    component: () => import('@/views/thread/ThreadView.vue'),
+    beforeEnter: [checkUserAuthorized]
   }
 ];
 

@@ -86,6 +86,14 @@ export const useUserStore = defineStore('userStore', () => {
     return true;
   };
 
+  const checkIfUserFollowed = (username) => _.includes(currentUser.value.follows, username);
+
+  const followUser = (username) =>
+    (currentUser.value.follows = _.concat(currentUser.value.follows, username));
+
+  const unfollowUser = (username) =>
+    (currentUser.value.follows = _.without(currentUser.value.follows, username));
+
   return {
     currentUser,
     isUserChecked,
@@ -96,6 +104,9 @@ export const useUserStore = defineStore('userStore', () => {
     logInUser,
     logOutUser,
     updateProfilePicture,
-    updateUserData
+    updateUserData,
+    checkIfUserFollowed,
+    followUser,
+    unfollowUser
   };
 });

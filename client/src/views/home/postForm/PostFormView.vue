@@ -1,11 +1,13 @@
 <template>
-  <button onclick="addPostModal.showModal()">posta dodaj</button>
-  <dialog ref="addPostModal" id="addPostModal" class="modal">
-    <div class="modal-box">
-      <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-      </form>
-      <h3 class="font-bold text-xl uppercase text-center mb-5">Add new post</h3>
+  <ModalComponent :modal-id="modalId">
+    <template v-slot:modal-button>
+      <slot />
+    </template>
+    <template v-slot:modal-content>
+      <h3 class="font-bold text-xl uppercase text-center mb-5">
+        Add new {{ parentPostId ? 'comment' : 'post' }}
+      </h3>
+      <QuotedPostComponent v-if="quotedPost" :quoted-post="quotedPost" />
       <form @submit="onSubmit" class="flex flex-col justify-center">
         <TextAreaComponent name="content" label="Posts's content" />
         <p class="h-8 text-error italic text-center m-1">{{ errorMessage }}</p>
@@ -13,24 +15,40 @@
           Add post
         </button>
       </form>
-    </div>
-  </dialog>
+    </template>
+  </ModalComponent>
 </template>
 
 <script setup>
 import { useForm } from 'vee-validate';
-import { TextAreaComponent } from '@/components';
-import { ref } from 'vue';
-import { useUserStore } from '@/stores';
-import validationSchema from './formValidation';
 import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
+import { TextAreaComponent, ModalComponent } from '@/components';
+import validationSchema from './formValidation';
 import { createPostRequest } from '@/services';
+import { useUserStore, useMainPagePosts } from '@/stores';
+import QuotedPostComponent from '@/components/post/QuotedPostComponent.vue';
 
-const store = useUserStore();
+const { parentPostId, quotedPost, modalId } = defineProps({
+  modalId: {
+    type: String,
+    required: true
+  },
+  parentPostId: {
+    type: String,
+    default: null
+  },
+  quotedPost: {
+    type: Object,
+    default: null
+  }
+});
 
-const { currentUserData } = storeToRefs(store);
+const userStore = useUserStore();
+const mainPagePostsStore = useMainPagePosts();
 
-const addPostModal = ref(null);
+const { addPost } = mainPagePostsStore;
+const { currentUserData } = storeToRefs(userStore);
 
 const errorMessage = ref('');
 
@@ -38,14 +56,19 @@ const { handleSubmit, isSubmitting } = useForm({ validationSchema });
 
 const onSubmit = handleSubmit(async (values) => {
   const newPost = {
+    parentPostId,
+    quotedPostId: quotedPost ? quotedPost._id : null,
     authorUsername: currentUserData.value.username,
     content: values.content
   };
 
   const { data, error } = await createPostRequest(newPost);
 
-  console.log(error);
+  if (error) {
+    return;
+  }
 
-  console.log(data);
+  addPost(data);
+  document.getElementById(modalId).close();
 });
 </script>

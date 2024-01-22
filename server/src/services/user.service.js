@@ -19,7 +19,7 @@ const createUser = async (username, password, firstname, surname) => {
   }
 };
 
-const getUserDetails = async (currentUserUsername, username) => {
+const getUserDetails = async (username) => {
   const foundUser = await User.aggregate([
     {
       $match: { username }
@@ -43,7 +43,7 @@ const getUserDetails = async (currentUserUsername, username) => {
         profilePictureUrl: '$profilePicture.url',
         followingCount: { $size: '$follows' },
         followersCount: { $size: '$followers' },
-        isFollowed: { $in: [currentUserUsername, '$followers.username'] }
+        follows: 1
       }
     }
   ]);
@@ -104,9 +104,8 @@ const updateProfilePicture = async (userId, profilePicture) => {
 
 const updateUserData = async (userId, userData) => {
   try {
-    console.log(userId);
-    console.log(userData);
     await User.findByIdAndUpdate(userId, userData);
+
     return true;
   } catch (error) {
     throw new Error(error);

@@ -6,6 +6,7 @@ import TextAreaComponent from './TextAreaComponent.vue';
 import ShortUserComponent from './profile/ShortUserComponent.vue';
 import NoContentComponent from './profile/NoContentComponent.vue';
 import PostComponent from './post/PostComponent.vue';
+import ModalComponent from './ModalComponent.vue';
 
 export {
   InputComponent,
@@ -15,5 +16,6 @@ export {
   TextAreaComponent,
   ShortUserComponent,
   NoContentComponent,
-  PostComponent
+  PostComponent,
+  ModalComponent
 };

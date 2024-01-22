@@ -1,5 +1,5 @@
 <template>
-  <div class="p-3 border-b border-b-gray-500">
+  <div class="p-3 border-b border-b-gray-500 break-all">
     {{ content }}
   </div>
 </template>

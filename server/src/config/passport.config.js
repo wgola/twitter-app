@@ -9,7 +9,7 @@ const serialization = (user, done) => {
 
 const deserialization = async (username, done) => {
   try {
-    const user = await getUserDetails(username, username);
+    const user = await getUserDetails(username);
 
     done(null, user);
   } catch (err) {
@@ -31,7 +31,7 @@ const strategy = async (username, password, done) => {
       return done(null, false, { message: 'Incorrect password' });
     }
 
-    const user_information = await getUserDetails(user.username, user.username);
+    const user_information = await getUserDetails(user.username);
 
     return done(null, user_information);
   } catch (err) {

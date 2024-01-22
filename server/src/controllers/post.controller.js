@@ -16,7 +16,7 @@ const getPostsEndpoint = async (req, res) => {
   try {
     const page = req.query.page || 1;
 
-    const posts = await getPosts(req.user.username, page);
+    const posts = await getPosts(page);
 
     return res.status(200).json(posts);
   } catch (err) {
@@ -41,7 +41,7 @@ const createPostEndoint = async (req, res) => {
   try {
     const postToCreate = req.body;
 
-    const createdPost = createPost(postToCreate);
+    const createdPost = await createPost(postToCreate);
 
     return res.status(201).json(createdPost);
   } catch (err) {

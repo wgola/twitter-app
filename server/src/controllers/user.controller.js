@@ -23,7 +23,7 @@ const updateProfilePictureEndpoint = async (req, res) => {
 
 const getUserDetailsEndpoint = async (req, res) => {
   try {
-    const foundUser = await getUserDetails(req.user.username, req.params.username);
+    const foundUser = await getUserDetails(req.params.username);
 
     res.json(foundUser);
   } catch (error) {

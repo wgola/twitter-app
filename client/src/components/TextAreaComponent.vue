@@ -6,7 +6,7 @@
     <textarea
       :name="name"
       v-model="value"
-      class="textarea textarea-bordered"
+      class="textarea textarea-bordered h-52"
       :disabled="disabled"
     />
     <p class="h-8 text-error italic text-center m-1">{{ errorMessage }}</p>

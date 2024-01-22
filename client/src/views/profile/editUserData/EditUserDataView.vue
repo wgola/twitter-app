@@ -1,12 +1,9 @@
 <template>
-  <button onclick="editUserDataModal.showModal()" class="btn btn-accent">
-    <v-icon name="fa-regular-edit" />Edit your data
-  </button>
-  <dialog ref="editUserDataModal" id="editUserDataModal" class="modal">
-    <div class="modal-box">
-      <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-      </form>
+  <ModalComponent :modal-id="MODAL_ID">
+    <template v-slot:modal-button>
+      <button class="btn btn-accent"><v-icon name="fa-regular-edit" />Edit your data</button>
+    </template>
+    <template v-slot:modal-content>
       <h3 class="font-bold text-xl uppercase text-center mb-5">Edit your data</h3>
       <form @submit="onSubmit" autocomplete="off">
         <InputComponent name="firstname" type="text" label="Firstname" />
@@ -17,24 +14,25 @@
           Edit
         </button>
       </form>
-    </div>
-  </dialog>
+    </template>
+  </ModalComponent>
 </template>
 
 <script setup>
 import { useForm } from 'vee-validate';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
-import { InputComponent, TextAreaComponent } from '@/components';
+import { InputComponent, TextAreaComponent, ModalComponent } from '@/components';
 import validationSchema from './editUserValidation';
 import { useUserStore } from '@/stores';
+
+const MODAL_ID = 'editUserDataModal';
 
 const store = useUserStore();
 
 const { updateUserData } = store;
 
 const { currentUserData } = storeToRefs(store);
-const editUserDataModal = ref(null);
 const errorMessage = ref('');
 
 const { handleSubmit, isSubmitting } = useForm({
@@ -51,7 +49,8 @@ const onSubmit = handleSubmit(async (values) => {
 
   if (result) {
     errorMessage.value = '';
-    editUserDataModal.value.close();
+    document.getElementById(MODAL_ID).close();
+
     return;
   }
 
