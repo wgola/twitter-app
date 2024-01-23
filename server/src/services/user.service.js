@@ -134,34 +134,31 @@ const updateUserData = async (userId, userData) => {
   }
 };
 
-const changeFollowingUser = async (userId, username) => {
+const followUser = async (userId, username) => {
   try {
-    const [{ isFollowed }] = await User.aggregate([
-      { $match: { _id: userId } },
-      {
-        $project: {
-          isFollowed: { $in: [username, '$follows'] }
-        }
+    await User.findByIdAndUpdate(userId, {
+      $addToSet: {
+        follows: username
       }
-    ]);
-
-    if (isFollowed) {
-      await User.findByIdAndUpdate(userId, {
-        $pull: {
-          follows: username
-        }
-      });
-    } else {
-      await User.findByIdAndUpdate(userId, {
-        $push: {
-          follows: username
-        }
-      });
-    }
+    });
   } catch (error) {
     LOG.error(error.message);
 
-    throw new Error(`Error following/unfollowing user: ${error.message}`);
+    throw new Error(`Error following user: ${error.message}`);
+  }
+};
+
+const unfollowUser = async (userId, username) => {
+  try {
+    await User.findByIdAndUpdate(userId, {
+      $pull: {
+        follows: username
+      }
+    });
+  } catch (error) {
+    LOG.error(error.message);
+
+    throw new Error(`Error unfollowing user: ${error.message}`);
   }
 };
 
@@ -245,7 +242,8 @@ module.exports = {
   getUserDetails,
   getUserGeneralData,
   updateUserData,
-  changeFollowingUser,
+  followUser,
+  unfollowUser,
   getUserFollowers,
   getUserFollowing
 };

@@ -1,7 +1,11 @@
 <template>
   <div class="m-5 rounded-2xl border border-gray-500">
     <PostHeaderComponent :author="quotedPost.author" />
-    <PostContentComponent :content="quotedPost.content" />
+    <PostContentComponent
+      :content="quotedPost.content"
+      :created-at="quotedPost.createdAt"
+      :updated-at="quotedPost.updatedAt"
+    />
     <RouterLink :to="`/thread/${quotedPost._id}`" class="flex justify-center m-1">
       <span class="hover:link"><v-icon name="hi-link" class="w-5 h-5 mr-1" />Go to thread </span>
     </RouterLink>

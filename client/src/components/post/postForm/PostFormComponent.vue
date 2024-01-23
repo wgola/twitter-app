@@ -24,8 +24,10 @@ import { useRoute, useRouter } from 'vue-router';
 import { useForm } from 'vee-validate';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
-import { TextAreaComponent, ModalComponent, QuotedPostComponent } from '@/components';
 import { useUserStore, useMainPageStore, useThreadPageStore } from '@/stores';
+import TextAreaComponent from '@/components/general/TextAreaComponent.vue';
+import ModalComponent from '@/components/general/ModalComponent.vue';
+import QuotedPostComponent from '../QuotedPostComponent.vue';
 import validationSchema from './formValidation';
 import { createPostRequest } from '@/services';
 

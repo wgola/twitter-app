@@ -1,5 +1,8 @@
 <template>
-  <div role="alert" :class="`${isShown || 'hidden'} alert alert-info`">
+  <div
+    role="alert"
+    :class="`alert alert-info transition-opacity ease-in-out duration-300 ${isShown ? 'opacity-100' : 'opacity-0'}`"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

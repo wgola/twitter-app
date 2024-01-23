@@ -3,9 +3,10 @@ const {
   getUserDetails,
   getUserGeneralData,
   updateUserData,
-  changeFollowingUser,
   getUserFollowers,
-  getUserFollowing
+  getUserFollowing,
+  getUserPosts,
+  getUserLikes
 } = require('../services');
 
 const updateProfilePictureEndpoint = async (req, res) => {
@@ -18,6 +19,36 @@ const updateProfilePictureEndpoint = async (req, res) => {
     res.status(201).json(updatedProfilePicture);
   } catch (error) {
     res.status(422).json({ message: error.message });
+  }
+};
+
+const getUserPostsEndpoint = async (req, res) => {
+  try {
+    const foundPosts = await getUserPosts(
+      req.params.username,
+      req.query.page,
+      req.query.limit,
+      req.query.timestamp
+    );
+
+    res.status(200).json(foundPosts);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+const getUserLikesEndpoint = async (req, res) => {
+  try {
+    const likedPosts = await getUserLikes(
+      req.params.username,
+      req.query.page,
+      req.query.limit,
+      req.query.timestamp
+    );
+
+    res.status(200).json(likedPosts);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 };
 
@@ -44,16 +75,6 @@ const getUserGeneralDataEndpoint = async (req, res) => {
 const updateUserDataEndpoint = async (req, res) => {
   try {
     await updateUserData(req.user._id, req.body);
-
-    res.sendStatus(201);
-  } catch (error) {
-    res.status(422).json({ message: error.message });
-  }
-};
-
-const changeFollowingUserEndpoint = async (req, res) => {
-  try {
-    await changeFollowingUser(req.user._id, req.params.username);
 
     res.sendStatus(201);
   } catch (error) {
@@ -94,7 +115,8 @@ module.exports = {
   getUserDetailsEndpoint,
   getUserGeneralDataEndpoint,
   updateUserDataEndpoint,
-  changeFollowingUserEndpoint,
   getUserFollowersEndpoint,
-  getUserFollowingEndpoint
+  getUserFollowingEndpoint,
+  getUserLikesEndpoint,
+  getUserPostsEndpoint
 };

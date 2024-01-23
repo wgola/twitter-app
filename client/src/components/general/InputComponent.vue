@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col">
-    <label :for="name" v-if="label" class="text-center text-xl font-bold uppercase">
+    <label :for="name" v-if="label" class="text-xl font-bold">
       {{ label }}
     </label>
     <input

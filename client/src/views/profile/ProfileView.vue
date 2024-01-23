@@ -70,7 +70,7 @@
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
-import { getUserDetailsByUsername, changeFollowingUserRequest } from '@/services';
+import { getUserDetailsByUsername, followUserRequest, unfollowUserRequest } from '@/services';
 import EditUserDataButton from './editUserData/EditUserDataView.vue';
 import { LoadingComponent, NoContentComponent } from '@/components';
 import EditAvatarButton from './editAvatar/EditAvatarView.vue';
@@ -125,19 +125,23 @@ watch(
   { immediate: true }
 );
 
-const onFollowClick = () => {
-  changeFollowingUserRequest(profileData.value.username);
+const onFollowClick = async () => {
+  const response = isUserFollowed.value
+    ? await unfollowUserRequest(profileData.value.username)
+    : await followUserRequest(profileData.value.username);
 
-  isUserFollowed.value = !isUserFollowed.value;
+  if (response) {
+    isUserFollowed.value = !isUserFollowed.value;
 
-  if (isUserFollowed.value) {
-    profileData.value.followersCount += 1;
-    store.currentUser.followingCount += 1;
-    followUser(profileData.value.username);
-  } else {
-    profileData.value.followersCount -= 1;
-    store.currentUser.followingCount -= 1;
-    unfollowUser(profileData.value.username);
+    if (isUserFollowed.value) {
+      profileData.value.followersCount += 1;
+      store.currentUser.followingCount += 1;
+      followUser(profileData.value.username);
+    } else {
+      profileData.value.followersCount -= 1;
+      store.currentUser.followingCount -= 1;
+      unfollowUser(profileData.value.username);
+    }
   }
 };
 </script>

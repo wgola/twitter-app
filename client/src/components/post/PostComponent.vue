@@ -6,7 +6,11 @@
     />
     <PostHeaderComponent :author="post.author" />
     <QuotedPostComponent v-if="post.quotedPost" :quoted-post="post.quotedPost" />
-    <PostContentComponent :content="post.content" />
+    <PostContentComponent
+      :content="post.content"
+      :created-at="post.createdAt"
+      :updated-at="post.updatedAt"
+    />
     <PostButtonsComponent :post="post" />
   </div>
 </template>

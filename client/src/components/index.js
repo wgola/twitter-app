@@ -6,6 +6,7 @@ import LoadingComponent from './general/LoadingComponent.vue';
 import ModalComponent from './general/ModalComponent.vue';
 import NoContentComponent from './general/NoContentComponent.vue';
 import TextAreaComponent from './general/TextAreaComponent.vue';
+import InfiniteScrollListComponent from './general/InfiniteScrollListComponent.vue';
 
 import ParentPostLinkComponent from './post/ParentPostLinkComponent.vue';
 import PostButtonsComponent from './post/PostButtonsComponent.vue';
@@ -13,6 +14,8 @@ import PostComponent from './post/PostComponent.vue';
 import PostContentComponent from './post/PostContentComponent.vue';
 import PostHeaderComponent from './post/PostHeaderComponent.vue';
 import QuotedPostComponent from './post/QuotedPostComponent.vue';
+
+import PostFormComponent from './post/postForm/PostFormComponent.vue';
 
 import ShortUserComponent from './profile/ShortUserComponent.vue';
 
@@ -31,5 +34,7 @@ export {
   PostContentComponent,
   PostHeaderComponent,
   QuotedPostComponent,
-  ShortUserComponent
+  PostFormComponent,
+  ShortUserComponent,
+  InfiniteScrollListComponent
 };

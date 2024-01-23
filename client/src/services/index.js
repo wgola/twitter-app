@@ -8,11 +8,20 @@ import {
   updateProfilePictureRequest,
   updateUserDataRequest,
   getUserDetailsByUsername,
-  changeFollowingUserRequest,
+  followUserRequest,
+  unfollowUserRequest,
   getUserFollowersRequest,
-  getUserFollowingsRequest
+  getUserFollowingsRequest,
+  getUserLikesRequest,
+  getUserPostsRequest
 } from './user.service';
-import { createPostRequest, getMainPostsRequest, getPostByIdRequest } from './post.service';
+import {
+  createPostRequest,
+  getMainPostsRequest,
+  getPostByIdRequest,
+  likePostRequest,
+  dislikePostRequest
+} from './post.service';
 
 export {
   registerUserRequest,
@@ -22,10 +31,15 @@ export {
   updateProfilePictureRequest,
   updateUserDataRequest,
   getUserDetailsByUsername,
-  changeFollowingUserRequest,
+  followUserRequest,
+  unfollowUserRequest,
   getUserFollowersRequest,
   getUserFollowingsRequest,
   createPostRequest,
   getMainPostsRequest,
-  getPostByIdRequest
+  getPostByIdRequest,
+  likePostRequest,
+  dislikePostRequest,
+  getUserLikesRequest,
+  getUserPostsRequest
 };

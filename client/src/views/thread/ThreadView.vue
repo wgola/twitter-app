@@ -5,18 +5,28 @@
       <PostComponent :post="post" />
     </div>
     <div class="flex w-fit gap-5 mx-auto m-5">
-      <PostFormView :modal-id="`${post._id}-comment`" :parent-post-id="post._id">
+      <PostFormComponent :modal-id="`${post._id}-comment`" :parent-post-id="post._id">
         <button class="btn btn-wide btn-accent uppercase">
           <v-icon name="fa-regular-edit" />Add comment
         </button>
-      </PostFormView>
-      <button @click="async () => await refresh()" class="btn btn-wide btn-accent uppercase">
+      </PostFormComponent>
+      <button
+        @click="async () => await refresh(route.params.threadId)"
+        class="btn btn-wide btn-accent uppercase"
+      >
         <v-icon name="hi-refresh" /> Refresh
+        <span class="badge badge-primary font-bold animate-pulse" v-if="newCommentsCount">{{
+          newCommentsCount
+        }}</span>
       </button>
     </div>
-    <div
-      v-infinite-scroll="[loadMoreComments, { canLoadMore: () => hasNextPage, distance: 20 }]"
-      class="flex flex-col gap-5 max-w-fit h-[480px] mx-auto overflow-y-auto"
+    <InfiniteScrollListComponent
+      :load-more-data="loadMoreComments"
+      :can-load-more="() => hasNextPage"
+      :height="480"
+      :is-fetching="isFetchingComments"
+      :is-no-content="!hasNextPage"
+      :no-content-message="comments.length === 0 ? 'No comments yet!' : 'No more comments!'"
     >
       <PostComponent
         v-for="comment in comments"
@@ -24,35 +34,63 @@
         :post="comment"
         :is-comment="true"
       />
-      <LoadingComponent v-if="isFetchingComments" />
-      <NoContentComponent v-if="!hasNextPage" message="No more comments!" class="mx-auto" />
-    </div>
+    </InfiniteScrollListComponent>
+    <AlertComponent
+      message="There are new comments!"
+      :is-shown="showAlert"
+      class="absolute w-60 bottom-20 left-20 z-50"
+    />
   </div>
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { watch } from 'vue';
-import { LoadingComponent, PostComponent, NoContentComponent } from '@/components';
-import { vInfiniteScroll } from '@vueuse/components';
-import PostFormView from '../post/PostFormView.vue';
+import { onUnmounted, ref, watch } from 'vue';
 import { useThreadPageStore } from '@/stores';
+import {
+  LoadingComponent,
+  PostComponent,
+  PostFormComponent,
+  AlertComponent,
+  InfiniteScrollListComponent
+} from '@/components';
+import { socket } from '@/config/wsClient';
 
 const store = useThreadPageStore();
 
-const { loadPost, loadMoreComments, refresh } = store;
+const { loadMoreComments, refresh } = store;
 
-const { post, comments, hasNextPage, isFetchingPost, isFetchingComments } = storeToRefs(store);
+const { post, comments, hasNextPage, isFetchingPost, isFetchingComments, newCommentsCount } =
+  storeToRefs(store);
+
+const threadId = ref('');
+const showAlert = ref(false);
 
 const route = useRoute();
 
+onUnmounted(() => {
+  socket.emit('leave-room', threadId.value);
+});
+
 watch(
   () => route.params.threadId,
-  async (newThread) => {
-    await refresh();
-    await loadPost(newThread);
+  (newThread) => {
+    socket.emit('leave-room', threadId.value);
+    threadId.value = newThread;
+    socket.emit('join-room', threadId.value);
+    refresh(threadId.value);
   },
   { immediate: true }
 );
+
+watch(newCommentsCount, (newValue) => {
+  console.log(newValue);
+  if (newCommentsCount.value === 1) {
+    showAlert.value = true;
+    setTimeout(() => {
+      showAlert.value = false;
+    }, 3000);
+  }
+});
 </script>

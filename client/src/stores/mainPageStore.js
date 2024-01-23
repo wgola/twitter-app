@@ -10,7 +10,7 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
   const hasNextPage = ref(true);
   const isFetching = ref(false);
   const timestamp = ref(new Date().getTime());
-  const newPosts = ref(false);
+  const newPostsCount = ref(0);
 
   const loadMorePosts = async () => {
     isFetching.value = true;
@@ -30,16 +30,16 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
     fetchedPosts.value = [];
     currentPage.value = 1;
     hasNextPage.value = true;
-    newPosts.value = false;
+    newPostsCount.value = 0;
     timestamp.value = new Date().getTime();
 
     loadMorePosts();
   };
 
-  socket.on('new-post', () => (newPosts.value = true));
+  socket.on('new-post', () => newPostsCount.value++);
 
   const addPost = (post) => {
-    if (newPosts.value) {
+    if (newPostsCount.value !== 0) {
       refresh();
     } else {
       fetchedPosts.value = _.concat([post], fetchedPosts.value);
@@ -54,7 +54,7 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
     loadMorePosts,
     isFetching,
     refresh,
-    newPosts,
+    newPostsCount,
     addPost
   };
 });

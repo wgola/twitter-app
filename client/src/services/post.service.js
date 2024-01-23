@@ -1,5 +1,6 @@
 import { apiClient } from '@/config/apiClient';
 import { wrapper } from './wrapper.service';
+import { socket } from '@/config/wsClient';
 
 export const createPostRequest = async (post) => {
   const request = async () => await apiClient.post('/api/posts', post);
@@ -27,4 +28,12 @@ export const getPostCommentsRequest = async (postId, page, limit, timestamp) => 
     );
 
   return await wrapper(request);
+};
+
+export const likePostRequest = async (postId) => {
+  return await socket.emitWithAck('like', postId);
+};
+
+export const dislikePostRequest = async (postId) => {
+  return await socket.emitWithAck('dislike', postId);
 };

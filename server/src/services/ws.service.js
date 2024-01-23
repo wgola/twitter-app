@@ -1,8 +1,6 @@
 const { LOG, io } = require('../config');
-
-const notifyMainPage = (exceptedUser) => {
-  io.to('main-page').except(exceptedUser).emit('new-post');
-};
+const { likePost, dislikePost } = require('./post.service');
+const { followUser, unfollowUser } = require('./user.service');
 
 io.on('connect', (socket) => {
   const session = socket.request.session;
@@ -11,7 +9,9 @@ io.on('connect', (socket) => {
 
   LOG.info(`Socket '${socket.id}' connected`);
 
-  socket.join(socket.request.user.username);
+  const currentUser = socket.request.user;
+
+  socket.join(currentUser.username);
 
   socket.on('join-room', (room) => {
     LOG.info(`Socket '${socket.id}' joins room '${room}'`);
@@ -26,8 +26,48 @@ io.on('connect', (socket) => {
   socket.on('disconnect', () => {
     LOG.info(`Socket '${socket.id}' disconnected`);
   });
+
+  socket.on('like', async (postId, callback) => {
+    try {
+      await likePost(postId, currentUser.username);
+
+      callback(true);
+    } catch {
+      callback(false);
+    }
+  });
+
+  socket.on('dislike', async (postId, callback) => {
+    try {
+      await dislikePost(postId, currentUser.username);
+
+      callback(true);
+    } catch {
+      callback(false);
+    }
+  });
+
+  socket.on('follow', async (username, callback) => {
+    try {
+      await followUser(currentUser._id, username);
+
+      callback(true);
+    } catch {
+      callback(false);
+    }
+  });
+
+  socket.on('unfollow', async (username, callback) => {
+    try {
+      await unfollowUser(currentUser._id, username);
+
+      callback(true);
+    } catch {
+      callback(false);
+    }
+  });
 });
 
 module.exports = {
-  notifyMainPage
+  configuredIo: io
 };

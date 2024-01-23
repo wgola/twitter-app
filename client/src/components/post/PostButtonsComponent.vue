@@ -9,13 +9,13 @@
     <RouterLink :to="`/thread/${post._id}`">
       <span><v-icon name="fa-comments" class="h-5 w-5 mx-1" />{{ post.commentsCount }}</span>
     </RouterLink>
-    <PostFormView :quoted-post="post" :modal-id="post._id">
+    <PostFormComponent :quoted-post="post" :modal-id="post._id">
       <button>
         <span>
           <v-icon name="bi-chat-quote-fill" class="h-5 w-5 mx-1" />{{ post.quotationsCount }}
         </span>
       </button>
-    </PostFormView>
+    </PostFormComponent>
   </div>
 </template>
 
@@ -24,7 +24,8 @@ import { ref } from 'vue';
 import { useUserStore } from '@/stores';
 import { storeToRefs } from 'pinia';
 import _ from 'lodash';
-import PostFormView from '@/views/post/PostFormView.vue';
+import PostFormComponent from './postForm/PostFormComponent.vue';
+import { dislikePostRequest, likePostRequest } from '@/services';
 
 const store = useUserStore();
 
@@ -41,13 +42,19 @@ const likes = ref(post.likes);
 
 const isLiked = ref(_.includes(likes.value, currentUserData.value.username));
 
-const onLikeClick = () => {
-  isLiked.value = !isLiked.value;
+const onLikeClick = async () => {
+  const response = isLiked.value
+    ? await dislikePostRequest(post._id)
+    : await likePostRequest(post._id);
 
-  if (isLiked.value) {
-    likes.value = _.concat(likes.value, currentUserData.value.username);
-  } else {
-    likes.value = _.without(likes.value, currentUserData.value.username);
+  if (response) {
+    isLiked.value = !isLiked.value;
+
+    if (isLiked.value) {
+      likes.value = _.concat(likes.value, currentUserData.value.username);
+    } else {
+      likes.value = _.without(likes.value, currentUserData.value.username);
+    }
   }
 };
 </script>

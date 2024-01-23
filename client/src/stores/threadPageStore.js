@@ -3,16 +3,17 @@ import { getPostCommentsRequest } from '@/services/post.service';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import _ from 'lodash';
+import { socket } from '@/config/wsClient';
 
 export const useThreadPageStore = defineStore('threadPageStore', () => {
   const post = ref(null);
   const comments = ref([]);
   const currentPage = ref(1);
   const hasNextPage = ref(true);
-  const isFetchingPost = ref(false);
+  const isFetchingPost = ref(true);
   const isFetchingComments = ref(false);
   const timestamp = ref(new Date().getTime());
-  const newComments = ref(false);
+  const newCommentsCount = ref(0);
 
   const loadPost = async (postId) => {
     post.value = null;
@@ -45,20 +46,31 @@ export const useThreadPageStore = defineStore('threadPageStore', () => {
     comments.value = _.concat(comments.value, data.docs);
     hasNextPage.value = data.hasNextPage;
     isFetchingComments.value = false;
+    currentPage.value++;
   };
 
-  const refresh = async () => {
+  const refresh = async (postId) => {
     currentPage.value = 1;
     hasNextPage.value = true;
     comments.value = [];
+    newCommentsCount.value = 0;
     timestamp.value = new Date().getTime();
 
-    await loadPost();
+    await loadPost(postId);
   };
 
+  socket.on('new-post', () => {
+    console.log('XD');
+    newCommentsCount.value++;
+  });
+
   const addComment = (newPost) => {
-    comments.value = _.concat([newPost], comments.value);
-    post.value.commentsCount++;
+    if (newCommentsCount.value !== 0) {
+      refresh(post.value._id);
+    } else {
+      comments.value = _.concat([newPost], comments.value);
+      post.value.commentsCount++;
+    }
   };
 
   return {
@@ -69,7 +81,7 @@ export const useThreadPageStore = defineStore('threadPageStore', () => {
     currentPage,
     isFetchingPost,
     isFetchingComments,
-    newComments,
+    newCommentsCount,
     loadPost,
     loadMoreComments,
     refresh,

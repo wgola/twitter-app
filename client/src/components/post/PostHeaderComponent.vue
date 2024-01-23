@@ -30,7 +30,7 @@
 import { useUserStore } from '@/stores';
 import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
-import { changeFollowingUserRequest } from '@/services';
+import { followUserRequest, unfollowUserRequest } from '@/services';
 
 const { author } = defineProps({
   author: {
@@ -54,17 +54,21 @@ watch(
   { immediate: true }
 );
 
-const onFollowClick = () => {
-  changeFollowingUserRequest(author.username);
+const onFollowClick = async () => {
+  const response = isUserFollowed.value
+    ? await unfollowUserRequest(author.username)
+    : await followUserRequest(author.username);
 
-  isUserFollowed.value = !isUserFollowed.value;
+  if (response) {
+    isUserFollowed.value = !isUserFollowed.value;
 
-  if (isUserFollowed.value) {
-    store.currentUser.followingCount += 1;
-    followUser(author.username);
-  } else {
-    store.currentUser.followingCount -= 1;
-    unfollowUser(author.username);
+    if (isUserFollowed.value) {
+      store.currentUser.followingCount += 1;
+      followUser(author.username);
+    } else {
+      store.currentUser.followingCount -= 1;
+      unfollowUser(author.username);
+    }
   }
 };
 </script>

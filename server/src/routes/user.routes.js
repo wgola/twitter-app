@@ -4,9 +4,10 @@ const {
   getUserDetailsEndpoint,
   getUserGeneralDataEndpoint,
   updateUserDataEndpoint,
-  changeFollowingUserEndpoint,
   getUserFollowersEndpoint,
-  getUserFollowingEndpoint
+  getUserFollowingEndpoint,
+  getUserPostsEndpoint,
+  getUserLikesEndpoint
 } = require('../controllers');
 
 const router = express.Router();
@@ -19,10 +20,12 @@ router.get('/:username', getUserGeneralDataEndpoint);
 
 router.put('/data', updateUserDataEndpoint);
 
-router.put('/:username/follow', changeFollowingUserEndpoint);
-
 router.get('/:username/followers', getUserFollowersEndpoint);
 
 router.get('/:username/following', getUserFollowingEndpoint);
+
+router.get('/:username/posts', getUserPostsEndpoint);
+
+router.get('/:username/likes', getUserLikesEndpoint);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const https = require('https');
-const { connectToDb, LOG, sslOptions, io } = require('./config');
+const { connectToDb, LOG, sslOptions } = require('./config');
+const { configuredIo } = require('./services');
 const app = require('./app');
 
 const main = async () => {
@@ -10,7 +11,7 @@ const main = async () => {
 
     const server = https.createServer(sslOptions, app);
 
-    io.attach(server);
+    configuredIo.attach(server);
 
     server.listen(PORT, () => LOG.info(`App is listenning on: 'https://localhost:${PORT}'`));
   }
