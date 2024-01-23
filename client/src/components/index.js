@@ -1,21 +1,35 @@
-import InputComponent from './InputComponent.vue';
-import HeaderComponent from './HeaderComponent.vue';
-import FooterComponent from './FooterComponent.vue';
-import LoadingComponent from './LoadingComponent.vue';
-import TextAreaComponent from './TextAreaComponent.vue';
-import ShortUserComponent from './profile/ShortUserComponent.vue';
-import NoContentComponent from './profile/NoContentComponent.vue';
+import AlertComponent from './general/AlertComponent.vue';
+import FooterComponent from './general/FooterComponent.vue';
+import HeaderComponent from './general/HeaderComponent.vue';
+import InputComponent from './general/InputComponent.vue';
+import LoadingComponent from './general/LoadingComponent.vue';
+import ModalComponent from './general/ModalComponent.vue';
+import NoContentComponent from './general/NoContentComponent.vue';
+import TextAreaComponent from './general/TextAreaComponent.vue';
+
+import ParentPostLinkComponent from './post/ParentPostLinkComponent.vue';
+import PostButtonsComponent from './post/PostButtonsComponent.vue';
 import PostComponent from './post/PostComponent.vue';
-import ModalComponent from './ModalComponent.vue';
+import PostContentComponent from './post/PostContentComponent.vue';
+import PostHeaderComponent from './post/PostHeaderComponent.vue';
+import QuotedPostComponent from './post/QuotedPostComponent.vue';
+
+import ShortUserComponent from './profile/ShortUserComponent.vue';
 
 export {
-  InputComponent,
-  HeaderComponent,
+  AlertComponent,
   FooterComponent,
+  HeaderComponent,
+  InputComponent,
   LoadingComponent,
-  TextAreaComponent,
-  ShortUserComponent,
+  ModalComponent,
   NoContentComponent,
+  TextAreaComponent,
+  ParentPostLinkComponent,
+  PostButtonsComponent,
   PostComponent,
-  ModalComponent
+  PostContentComponent,
+  PostHeaderComponent,
+  QuotedPostComponent,
+  ShortUserComponent
 };

@@ -14,10 +14,10 @@
 </template>
 
 <script setup>
+import { vInfiniteScroll } from '@vueuse/components';
 import { useRoute } from 'vue-router';
 import { ref, watch } from 'vue';
 import { ShortUserComponent, NoContentComponent } from '@/components';
-import { vInfiniteScroll } from '@vueuse/components';
 import { getUserFollowingsRequest } from '@/services';
 
 const route = useRoute();

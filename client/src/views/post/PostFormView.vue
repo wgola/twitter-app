@@ -20,14 +20,14 @@
 </template>
 
 <script setup>
+import { useRoute, useRouter } from 'vue-router';
 import { useForm } from 'vee-validate';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
-import { TextAreaComponent, ModalComponent } from '@/components';
+import { TextAreaComponent, ModalComponent, QuotedPostComponent } from '@/components';
+import { useUserStore, useMainPageStore, useThreadPageStore } from '@/stores';
 import validationSchema from './formValidation';
 import { createPostRequest } from '@/services';
-import { useUserStore, useMainPageStore, useThreadPageStore } from '@/stores';
-import QuotedPostComponent from '@/components/post/QuotedPostComponent.vue';
 
 const { parentPostId, quotedPost, modalId } = defineProps({
   modalId: {
@@ -47,6 +47,8 @@ const { parentPostId, quotedPost, modalId } = defineProps({
 const userStore = useUserStore();
 const mainPagePostsStore = useMainPageStore();
 const threadPageStore = useThreadPageStore();
+const route = useRoute();
+const router = useRouter();
 
 const { addPost } = mainPagePostsStore;
 const { addComment } = threadPageStore;
@@ -54,7 +56,7 @@ const { currentUserData } = storeToRefs(userStore);
 
 const errorMessage = ref('');
 
-const { handleSubmit, isSubmitting } = useForm({ validationSchema });
+const { handleSubmit, isSubmitting, resetForm } = useForm({ validationSchema });
 
 const onSubmit = handleSubmit(async (values) => {
   const newPost = {
@@ -73,9 +75,14 @@ const onSubmit = handleSubmit(async (values) => {
   if (parentPostId) {
     addComment(data);
   } else {
+    if (route.fullPath !== '/home') {
+      router.push('/home');
+    }
+
     addPost(data);
   }
 
+  resetForm();
   document.getElementById(modalId).close();
 });
 </script>

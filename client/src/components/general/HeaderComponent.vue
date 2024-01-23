@@ -28,7 +28,7 @@
         </ul>
       </div>
       <RouterLink to="/">
-        <img src="../assets/logo.svg" width="50px" />
+        <img src="@/assets/logo.svg" width="50px" />
       </RouterLink>
     </div>
     <div class="navbar-center hidden lg:flex">

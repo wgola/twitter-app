@@ -11,6 +11,7 @@ export const useThreadPageStore = defineStore('threadPageStore', () => {
   const hasNextPage = ref(true);
   const isFetchingPost = ref(false);
   const isFetchingComments = ref(false);
+  const timestamp = ref(new Date().getTime());
   const newComments = ref(false);
 
   const loadPost = async (postId) => {
@@ -30,7 +31,12 @@ export const useThreadPageStore = defineStore('threadPageStore', () => {
   const loadMoreComments = async () => {
     isFetchingComments.value = true;
 
-    const { data, error } = await getPostCommentsRequest(post.value._id, currentPage.value);
+    const { data, error } = await getPostCommentsRequest(
+      post.value._id,
+      currentPage.value,
+      10,
+      timestamp.value
+    );
 
     if (error) {
       return;
@@ -45,6 +51,7 @@ export const useThreadPageStore = defineStore('threadPageStore', () => {
     currentPage.value = 1;
     hasNextPage.value = true;
     comments.value = [];
+    timestamp.value = new Date().getTime();
 
     await loadPost();
   };
@@ -55,6 +62,7 @@ export const useThreadPageStore = defineStore('threadPageStore', () => {
   };
 
   return {
+    timestamp,
     post,
     comments,
     hasNextPage,

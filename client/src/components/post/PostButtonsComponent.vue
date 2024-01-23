@@ -24,7 +24,7 @@ import { ref } from 'vue';
 import { useUserStore } from '@/stores';
 import { storeToRefs } from 'pinia';
 import _ from 'lodash';
-import PostFormView from '@/views/home/postForm/PostFormView.vue';
+import PostFormView from '@/views/post/PostFormView.vue';
 
 const store = useUserStore();
 

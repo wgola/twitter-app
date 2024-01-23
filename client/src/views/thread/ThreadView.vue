@@ -31,13 +31,13 @@
 </template>
 
 <script setup>
-import { watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useThreadPageStore } from '@/stores/threadPageStore';
 import { storeToRefs } from 'pinia';
+import { watch } from 'vue';
 import { LoadingComponent, PostComponent, NoContentComponent } from '@/components';
-import PostFormView from '../home/postForm/PostFormView.vue';
 import { vInfiniteScroll } from '@vueuse/components';
+import PostFormView from '../post/PostFormView.vue';
+import { useThreadPageStore } from '@/stores';
 
 const store = useThreadPageStore();
 

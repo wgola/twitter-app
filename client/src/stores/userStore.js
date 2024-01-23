@@ -8,6 +8,7 @@ import {
   updateProfilePictureRequest,
   updateUserDataRequest
 } from '@/services';
+import { socket } from '@/config/wsClient';
 
 export const useUserStore = defineStore('userStore', () => {
   const currentUser = ref({});
@@ -32,6 +33,7 @@ export const useUserStore = defineStore('userStore', () => {
       return;
     }
 
+    socket.connect();
     currentUser.value = data;
     isChangingUserStatus.value = false;
     isUserChecked.value = true;
@@ -44,6 +46,7 @@ export const useUserStore = defineStore('userStore', () => {
       return false;
     }
 
+    socket.connect();
     currentUser.value = data;
     return true;
   };
@@ -57,6 +60,7 @@ export const useUserStore = defineStore('userStore', () => {
       return false;
     }
 
+    socket.disconnect();
     currentUser.value = {};
     isChangingUserStatus.value = false;
     return true;

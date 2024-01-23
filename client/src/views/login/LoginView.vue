@@ -24,13 +24,12 @@
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import { useForm } from 'vee-validate';
+import { ref } from 'vue';
 import validationSchema from './loginValidation';
 import { InputComponent } from '@/components';
-import { ref } from 'vue';
 import { useUserStore } from '@/stores';
-import { useRouter } from 'vue-router';
 
 const { handleSubmit, isSubmitting } = useForm({ validationSchema });
 const store = useUserStore();
