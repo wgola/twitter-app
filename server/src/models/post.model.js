@@ -131,6 +131,8 @@ FormattedPost.createCollection({
         quotedPost: {
           _id: '$quotedPost._id',
           content: '$quotedPost.content',
+          createdAt: '$quotedPost.createdAt',
+          updatedAt: '$quotedPost.updatedAt',
           author: {
             _id: '$quotedPostAuthor._id',
             username: '$quotedPostAuthor.username',

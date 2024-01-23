@@ -1,7 +1,7 @@
 <template>
   <div
     v-infinite-scroll="[loadMoreData, { canLoadMore, distance: 20 }]"
-    :class="`flex flex-col gap-5 max-w-fit h-[${height}px] mx-auto overflow-y-scroll`"
+    class="flex flex-col gap-5 max-w-fit mx-auto overflow-y-scroll"
   >
     <slot />
     <LoadingComponent v-if="isFetching" />
@@ -21,10 +21,6 @@ defineProps({
   },
   canLoadMore: {
     type: Function,
-    required: true
-  },
-  height: {
-    type: Number,
     required: true
   },
   isFetching: {

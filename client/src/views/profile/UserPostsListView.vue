@@ -3,10 +3,10 @@
     <InfiniteScrollListComponent
       :load-more-data="loadMorePosts"
       :can-load-more="() => hasNextPage"
-      :height="400"
       :is-fetching="isFetching"
       :is-no-content="!hasNextPage"
       :no-content-message="posts.length === 0 ? 'No posts yet!' : 'No more posts!'"
+      class="max-h-[400px]"
     >
       <PostComponent v-for="post in posts" :key="post._id" :post="post" />
     </InfiniteScrollListComponent>

@@ -18,10 +18,10 @@
     <InfiniteScrollListComponent
       :load-more-data="loadMorePosts"
       :can-load-more="() => hasNextPage"
-      :height="650"
       :is-fetching="isFetching"
       :is-no-content="!hasNextPage"
       no-content-message="No more posts!"
+      class="max-h-[650px]"
     >
       <PostComponent v-for="post in fetchedPosts" :key="post._id" :post="post" />
     </InfiniteScrollListComponent>

@@ -23,10 +23,10 @@
     <InfiniteScrollListComponent
       :load-more-data="loadMoreComments"
       :can-load-more="() => hasNextPage"
-      :height="480"
       :is-fetching="isFetchingComments"
       :is-no-content="!hasNextPage"
       :no-content-message="comments.length === 0 ? 'No comments yet!' : 'No more comments!'"
+      class="max-h-[470px]"
     >
       <PostComponent
         v-for="comment in comments"
