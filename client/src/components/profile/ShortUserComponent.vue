@@ -3,7 +3,7 @@
     <div class="flex bg-base-300 w-64 rounded-xl px-2">
       <div class="avatar m-2">
         <div class="w-14 rounded-full">
-          <img :src="user.profilePictureUrl || '/src/assets/avatar.png'" />
+          <img :src="user.profilePictureUrl || avatar" />
         </div>
       </div>
       <div class="flex flex-col m-2">
@@ -17,6 +17,8 @@
 </template>
 
 <script setup>
+import avatar from '@/assets/avatar.png';
+
 defineProps({
   user: {
     type: Object,

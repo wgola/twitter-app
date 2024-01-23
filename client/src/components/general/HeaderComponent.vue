@@ -42,10 +42,7 @@
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
-            <img
-              alt="profilePicture"
-              :src="currentUserData.profilePictureUrl || '/src/assets/avatar.png'"
-            />
+            <img alt="profilePicture" :src="currentUserData.profilePictureUrl || avatar" />
           </div>
         </div>
         <ul
@@ -73,6 +70,7 @@ import { RouterLink, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
 import { useUserStore } from '@/stores';
+import avatar from '@/assets/avatar.png';
 
 const store = useUserStore();
 const router = useRouter();

@@ -38,4 +38,14 @@ app.get('/api', (_req, res) => {
   res.json({ msg: 'Y API v1' });
 });
 
+if (process.env.NODE_ENV === 'prod') {
+  const path = __dirname + '/views';
+
+  app.use(express.static(path));
+
+  app.get('/', (_req, res) => {
+    res.sendFile(path + '/index.html');
+  });
+}
+
 module.exports = app;

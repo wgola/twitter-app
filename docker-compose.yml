@@ -9,5 +9,13 @@ services:
     volumes:
       - dbvolume:/etc/mongo
 
+  app:
+    build: .
+    container_name: "app"
+    ports:
+      - 8080:8080
+    env_file:
+      - ./server/.env
+
 volumes:
   dbvolume:

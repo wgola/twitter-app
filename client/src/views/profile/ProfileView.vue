@@ -5,7 +5,7 @@
     <div class="mx-auto w-2/3">
       <div class="avatar">
         <div class="w-24 rounded-full m-1 border border-accent">
-          <img :src="profileData.profilePictureUrl || 'src/assets/avatar.png'" />
+          <img :src="profileData.profilePictureUrl || avatar" />
         </div>
         <EditAvatarButton v-if="isCurrentUser" />
       </div>
@@ -67,6 +67,7 @@
 </template>
 
 <script setup>
+import avatar from '@/assets/avatar.png';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';

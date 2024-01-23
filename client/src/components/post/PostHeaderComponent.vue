@@ -2,7 +2,7 @@
   <div class="flex py-1 px-3 border-b border-b-gray-500">
     <div class="avatar m-2">
       <div class="w-14 rounded-full">
-        <img :src="author.profilePictureUrl || '/src/assets/avatar.png'" />
+        <img :src="author.profilePictureUrl || avatar" />
       </div>
     </div>
     <div class="flex justify-between w-full">
@@ -31,6 +31,7 @@ import { useUserStore } from '@/stores';
 import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
 import { followUserRequest, unfollowUserRequest } from '@/services';
+import avatar from '@/assets/avatar.png';
 
 const { author } = defineProps({
   author: {
