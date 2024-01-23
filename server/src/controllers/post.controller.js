@@ -7,20 +7,22 @@ const getPostByIdEndpoint = async (req, res) => {
     const post = await getPostById(postId);
 
     return res.status(200).json(post);
-  } catch (err) {
-    return res.status(500).json(err);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 
 const getPostsEndpoint = async (req, res) => {
   try {
     const page = req.query.page || 1;
+    const limit = req.query.limit || 10;
+    const timestamp = req.query.timestamp || new Date().getTime();
 
-    const posts = await getPosts(page);
+    const posts = await getPosts(page, limit, timestamp);
 
     return res.status(200).json(posts);
-  } catch (err) {
-    return res.status(500).json(err);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -28,12 +30,14 @@ const getPostCommentsEndpoint = async (req, res) => {
   try {
     const postId = req.params.postId;
     const page = req.query.page || 1;
+    const limit = req.query.limit || 10;
+    const timestamp = req.query.timestamp || new Date().getTime();
 
-    const posts = await getPostComments(postId, page);
+    const posts = await getPostComments(postId, page, limit, timestamp);
 
     return res.status(200).json(posts);
-  } catch (err) {
-    return res.status(500).json(err);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -44,8 +48,8 @@ const createPostEndoint = async (req, res) => {
     const createdPost = await createPost(postToCreate);
 
     return res.status(201).json(createdPost);
-  } catch (err) {
-    return res.status(500).json(err);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 

@@ -114,6 +114,8 @@ FormattedPost.createCollection({
     {
       $project: {
         _id: 1,
+        createdAt: 1,
+        updatedAt: 1,
         content: 1,
         likes: 1,
         commentsCount: { $size: '$comments' },

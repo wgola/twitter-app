@@ -2,11 +2,11 @@ const {
   createLogger,
   format: { combine, timestamp, prettyPrint, json },
   transports: { Console }
-} = require('winston')
+} = require('winston');
 
-const LOGGER = createLogger({
+const LOG = createLogger({
   format: combine(timestamp(), json(), prettyPrint()),
   transports: [new Console()]
-})
+});
 
-module.exports = LOGGER
+module.exports = { LOG };

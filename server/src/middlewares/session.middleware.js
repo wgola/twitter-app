@@ -1,6 +1,14 @@
 const expressSession = require('express-session');
-const { sessionConfig } = require('../config');
+const dotenv = require('dotenv');
 
-const sessionMiddleware = expressSession(sessionConfig);
+dotenv.config();
 
-module.exports = sessionMiddleware;
+const sessionOptions = {
+  secret: process.env.SESSION_SECRET || 'app-secret',
+  resave: true,
+  saveUninitialized: false
+};
+
+const sessionMiddleware = expressSession(sessionOptions);
+
+module.exports = { sessionMiddleware };

@@ -1,14 +1,14 @@
-const { LOGGER } = require('../config');
+const { LOG } = require('../config');
 
 const authorizationMiddleware = (req, res, next) => {
   if (!req.user) {
-    LOGGER.info('Unauthorized request');
+    LOG.error('Unauthorized request');
     res.status(403).send({ message: 'Unauthorized!' });
     return;
   }
 
-  LOGGER.info('Authorized request');
+  LOG.info('Authorized request');
   next();
 };
 
-module.exports = authorizationMiddleware;
+module.exports = { authorizationMiddleware };

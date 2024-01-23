@@ -5,8 +5,10 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
-const { localStrategy, serialization, deserialization } = require('./config');
-const { authorizationMiddleware, loggingMiddleware, sessionMiddleware } = require('./middlewares');
+const { authorizationMiddleware } = require('./middlewares/authorization.middleware');
+const { loggingMiddleware } = require('./middlewares/logging.middleware');
+const { sessionMiddleware } = require('./middlewares/session.middleware');
+const { localStrategy, serialization, deserialization } = require('./services');
 const { postsRouter, authRouter, userRouter } = require('./routes');
 
 const app = express();

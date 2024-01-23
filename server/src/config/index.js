@@ -1,15 +1,13 @@
-const passportConfig = require('./passport.config');
-const sessionConfig = require('./session.config');
-const sslOptions = require('./ssl.config');
-const LOGGER = require('./logger.config');
-const dbConfig = require('./db.config');
-const imagekit = require('./imagekit.config');
+const { imagekit } = require('./imagekit.config');
+const { connectToDb } = require('./db.config');
+const { sslOptions } = require('./ssl.config');
+const { LOG } = require('./logger.config');
+const { io } = require('./ws.config');
 
 module.exports = {
-  LOGGER,
+  connectToDb,
   sslOptions,
-  ...passportConfig,
-  ...dbConfig,
-  sessionConfig,
-  imagekit
+  imagekit,
+  LOG,
+  io
 };

@@ -1,7 +1,7 @@
 const passportLocal = require('passport-local');
 const bcrypt = require('bcrypt');
+const { getUserDetails } = require('./user.service');
 const { User } = require('../models');
-const { getUserDetails } = require('../services/user.service');
 
 const serialization = (user, done) => {
   done(null, user.username);

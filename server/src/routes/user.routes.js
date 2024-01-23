@@ -1,3 +1,4 @@
+const express = require('express');
 const {
   updateProfilePictureEndpoint,
   getUserDetailsEndpoint,
@@ -7,8 +8,6 @@ const {
   getUserFollowersEndpoint,
   getUserFollowingEndpoint
 } = require('../controllers');
-
-const express = require('express');
 
 const router = express.Router();
 

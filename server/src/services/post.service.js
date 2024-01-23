@@ -1,15 +1,19 @@
-const { LOGGER } = require('../config');
+const { LOG } = require('../config');
+const { notifyMainPage } = require('./ws.service');
 const { Post, FormattedPost } = require('../models');
 
-const getPosts = async (page) => {
+const getPosts = async (page, limit, timestamp) => {
   try {
-    const postsAggregation = await FormattedPost.paginate({}, { page, limit: 5 });
+    const postsAggregation = await FormattedPost.paginate(
+      { createdAt: { $lt: timestamp } },
+      { page, limit }
+    );
 
     return postsAggregation;
-  } catch (err) {
-    LOGGER.error(err);
+  } catch (error) {
+    LOG.error(error.message);
 
-    throw new Error(`Error getting posts: ${err}`);
+    throw new Error(`Error getting posts: ${error.message}`);
   }
 };
 
@@ -18,22 +22,25 @@ const getPostById = async (postId) => {
     const foundPost = await FormattedPost.findById(postId);
 
     return foundPost;
-  } catch (err) {
-    LOGGER.error(err);
+  } catch (error) {
+    LOG.error(error.message);
 
-    throw new Error(`Error getting post by ID: ${err}`);
+    throw new Error(`Error getting post by ID: ${error.message}`);
   }
 };
 
-const getPostComments = async (postId, page) => {
+const getPostComments = async (postId, page, limit, timestamp) => {
   try {
-    const postComments = await FormattedPost.paginate({ parentPostId: postId }, { page, limit: 5 });
+    const postComments = await FormattedPost.paginate(
+      { parentPostId: postId, createdAt: { $lt: timestamp } },
+      { page, limit }
+    );
 
     return postComments;
-  } catch (err) {
-    LOGGER.error(err);
+  } catch (error) {
+    LOG.error(error.message);
 
-    throw new Error(`Error getting post comments: ${err}`);
+    throw new Error(`Error getting post comments: ${error.message}`);
   }
 };
 
@@ -43,11 +50,13 @@ const createPost = async (post) => {
 
     const formattedCreatedPost = await FormattedPost.findById(createdPost._id);
 
-    return formattedCreatedPost;
-  } catch (err) {
-    LOGGER.error(err);
+    notifyMainPage(post.authorUsername);
 
-    throw new Error(`Error creating post: ${err}`);
+    return formattedCreatedPost;
+  } catch (error) {
+    LOG.error(error.message);
+
+    throw new Error(`Error creating post: ${error.message}`);
   }
 };
 

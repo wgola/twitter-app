@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
-const { User } = require('../models');
 const { saveFile, deleteFile } = require('./storage.service');
+const { User } = require('../models');
+const { LOG } = require('../config');
 
 const createUser = async (username, password, firstname, surname) => {
   try {
@@ -14,68 +15,86 @@ const createUser = async (username, password, firstname, surname) => {
     const createdUser = await User.create(user);
 
     return createdUser;
-  } catch (err) {
-    throw new Error('Error creating user: ' + err);
+  } catch (error) {
+    LOG.error(error.message);
+
+    throw new Error(`Error creating user: ${error.message}`);
   }
 };
 
 const getUserDetails = async (username) => {
-  const foundUser = await User.aggregate([
-    {
-      $match: { username }
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'username',
-        foreignField: 'follows',
-        as: 'followers'
+  try {
+    const foundUser = await User.aggregate([
+      {
+        $match: { username }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'username',
+          foreignField: 'follows',
+          as: 'followers'
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          username: 1,
+          firstname: 1,
+          surname: 1,
+          description: 1,
+          joinedAt: '$createdAt',
+          profilePictureUrl: '$profilePicture.url',
+          followingCount: { $size: '$follows' },
+          followersCount: { $size: '$followers' },
+          follows: 1
+        }
       }
-    },
-    {
-      $project: {
-        _id: 1,
-        username: 1,
-        firstname: 1,
-        surname: 1,
-        description: 1,
-        joinedAt: '$createdAt',
-        profilePictureUrl: '$profilePicture.url',
-        followingCount: { $size: '$follows' },
-        followersCount: { $size: '$followers' },
-        follows: 1
-      }
+    ]);
+
+    if (foundUser.length !== 1) {
+      LOG.error(`User '${username}' not found`);
+
+      throw new Error(`User '${username}' not found`);
     }
-  ]);
 
-  if (foundUser.length !== 1) {
-    throw new Error('User not found!');
+    return foundUser[0];
+  } catch (error) {
+    LOG.error(error.message);
+
+    throw new Error(`Error finding user '${username}': ${error.message}`);
   }
-
-  return foundUser[0];
 };
 
 const getUserGeneralData = async (username) => {
-  const foundUser = await User.aggregate([
-    {
-      $match: { username }
-    },
-    {
-      $project: {
-        _id: 1,
-        username: 1,
-        firstname: 1,
-        surname: 1,
-        profilePictureUrl: '$profilePicture.url'
+  try {
+    const foundUser = await User.aggregate([
+      {
+        $match: { username }
+      },
+      {
+        $project: {
+          _id: 1,
+          username: 1,
+          firstname: 1,
+          surname: 1,
+          profilePictureUrl: '$profilePicture.url'
+        }
       }
+    ]);
+
+    if (foundUser.length !== 1) {
+      LOG.error(`User '${username}' not found`);
+
+      throw new Error(`User '${username}' not found`);
     }
-  ]);
 
-  if (foundUser.length !== 1) {
-    throw new Error('User not found!');
+    return foundUser[0];
+  } catch (error) {
+    LOG.error(error.message);
+
+    throw new Error(`Error finding user '${username}': '${error.message}'`);
   }
-
-  return foundUser[0];
 };
 
 const updateProfilePicture = async (userId, profilePicture) => {
@@ -97,8 +116,9 @@ const updateProfilePicture = async (userId, profilePicture) => {
 
     return url;
   } catch (error) {
-    console.log(error);
-    throw new Error(error);
+    LOG.error(error.message);
+
+    throw new Error(`Error updating profile picture: ${error.message}`);
   }
 };
 
@@ -108,7 +128,9 @@ const updateUserData = async (userId, userData) => {
 
     return true;
   } catch (error) {
-    throw new Error(error);
+    LOG.error(error.message);
+
+    throw new Error(`Error updating user data: ${error.message}`);
   }
 };
 
@@ -137,7 +159,9 @@ const changeFollowingUser = async (userId, username) => {
       });
     }
   } catch (error) {
-    throw new Error(error);
+    LOG.error(error.message);
+
+    throw new Error(`Error following/unfollowing user: ${error.message}`);
   }
 };
 
@@ -172,7 +196,9 @@ const getUserFollowers = async (username, page, limit) => {
       limit: limit
     });
   } catch (error) {
-    throw new Error(error);
+    LOG.error(error.message);
+
+    throw new Error(`Error getting user followers: ${error.message}`);
   }
 };
 
@@ -207,7 +233,9 @@ const getUserFollowing = async (username, page, limit) => {
       limit: limit
     });
   } catch (error) {
-    throw new Error(error);
+    LOG.error(error.message);
+
+    throw new Error(`Error getting user followings: ${error.message}`);
   }
 };
 

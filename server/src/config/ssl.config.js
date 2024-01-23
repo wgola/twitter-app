@@ -4,9 +4,9 @@ const fs = require('fs');
 
 dotenv.config();
 
-const options = {
+const sslOptions = {
   key: fs.readFileSync(path.resolve(__dirname, '../certificate/key.key')),
   cert: fs.readFileSync(path.resolve(__dirname, '../certificate/cert.crt'))
 };
 
-module.exports = options;
+module.exports = { sslOptions };

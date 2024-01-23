@@ -1,4 +1,4 @@
-const { LOGGER } = require('../config');
+const { LOG } = require('../config');
 
 const loggingMiddleware = (req, _res, next) => {
   const message = {
@@ -7,8 +7,8 @@ const loggingMiddleware = (req, _res, next) => {
     url: req.originalUrl
   };
 
-  LOGGER.info(message);
+  LOG.info(message);
   next();
 };
 
-module.exports = loggingMiddleware;
+module.exports = { loggingMiddleware };

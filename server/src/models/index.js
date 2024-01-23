@@ -1,8 +1,8 @@
-const User = require('./user.model');
 const { Post, FormattedPost } = require('./post.model');
+const { User } = require('./user.model');
 
 module.exports = {
-  User,
+  FormattedPost,
   Post,
-  FormattedPost
+  User
 };

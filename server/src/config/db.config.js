@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const LOGGER = require('./logger.config');
+const { LOG } = require('./logger.config');
 
 dotenv.config();
 
@@ -11,11 +11,11 @@ const MONGO_DB = process.env.MONGO_DB;
 const connectToDb = async () => {
   try {
     await mongoose.connect(`mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}`);
-    LOGGER.info(`Connected to database '${MONGO_DB}'`);
+    LOG.info(`Connected to database '${MONGO_DB}'`);
 
     return true;
-  } catch (err) {
-    LOGGER.error(`Error connecting to database: ${err}`);
+  } catch (error) {
+    LOG.error(`Error connecting to database: ${error.message}`);
 
     return false;
   }
