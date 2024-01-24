@@ -1,7 +1,7 @@
 <template>
   <main>
-    <div class="flex flex-col">
-      <div class="flex w-fit gap-5 mx-auto mb-5">
+    <div class="flex flex-col w-fit mx-auto">
+      <div class="flex gap-5 mb-5">
         <PostFormComponent modal-id="newPost">
           <button class="btn btn-wide btn-accent uppercase">
             <v-icon name="fa-regular-edit" />Add new post
@@ -14,6 +14,16 @@
           }}</span>
         </button>
       </div>
+      <div class="flex mb-5">
+        <input
+          type="checkbox"
+          class="toggle toggle-accent"
+          v-model="onlyFollowedPosts"
+          :true-value="true"
+          :false-value="false"
+        />
+        <span :class="`${onlyFollowedPosts && 'text-accent'} mx-2`">{{ toggleMessage }}</span>
+      </div>
     </div>
     <InfiniteScrollListComponent
       :load-more-data="loadMorePosts"
@@ -21,7 +31,7 @@
       :is-fetching="isFetching"
       :is-no-content="!hasNextPage"
       no-content-message="No more posts!"
-      class="max-h-[650px]"
+      class="max-h-[630px]"
     >
       <PostComponent v-for="post in fetchedPosts" :key="post._id" :post="post" />
     </InfiniteScrollListComponent>
@@ -34,7 +44,7 @@
 </template>
 
 <script setup>
-import { onUnmounted, onMounted, watch, ref } from 'vue';
+import { onUnmounted, onMounted, watch, ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMainPageStore } from '@/stores';
 import { socket } from '@/config/wsClient';
@@ -49,8 +59,13 @@ const store = useMainPageStore();
 
 const { loadMorePosts, refresh } = store;
 
-const { fetchedPosts, hasNextPage, isFetching, newPostsCount } = storeToRefs(store);
+const { fetchedPosts, hasNextPage, isFetching, newPostsCount, onlyFollowedPosts } =
+  storeToRefs(store);
 const showAlert = ref(false);
+
+const toggleMessage = computed(() =>
+  onlyFollowedPosts.value ? 'Followers posts only' : 'All posts'
+);
 
 onMounted(() => {
   socket.emit('join-room', 'main-page');

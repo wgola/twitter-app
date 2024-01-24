@@ -98,6 +98,16 @@ export const useUserStore = defineStore('userStore', () => {
   const unfollowUser = (username) =>
     (currentUser.value.follows = _.without(currentUser.value.follows, username));
 
+  socket.on('followed', (username) => {
+    console.log(username + ' followed you!');
+    currentUser.value.followersCount++;
+  });
+
+  socket.on('unfollowed', (username) => {
+    console.log(username + ' unfollowed you!');
+    currentUser.value.followersCount--;
+  });
+
   return {
     currentUser,
     isUserChecked,

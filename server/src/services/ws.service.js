@@ -51,6 +51,8 @@ io.on('connect', (socket) => {
     try {
       await followUser(currentUser._id, username);
 
+      socket.to(username).emit('followed', currentUser.username);
+
       callback(true);
     } catch {
       callback(false);
@@ -60,6 +62,8 @@ io.on('connect', (socket) => {
   socket.on('unfollow', async (username, callback) => {
     try {
       await unfollowUser(currentUser._id, username);
+
+      socket.to(username).emit('unfollowed', currentUser.username);
 
       callback(true);
     } catch {

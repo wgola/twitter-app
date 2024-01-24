@@ -8,9 +8,11 @@ export const createPostRequest = async (post) => {
   return await wrapper(request);
 };
 
-export const getMainPostsRequest = async (page, limit, timestamp) => {
+export const getMainPostsRequest = async (page, limit, timestamp, isOnlyFollows) => {
   const request = async () =>
-    await apiClient.get(`/api/posts?page=${page}&limit=${limit}&timestamp=${timestamp}`);
+    await apiClient.get(
+      `/api/posts${isOnlyFollows ? '/follows' : ''}?page=${page}&limit=${limit}&timestamp=${timestamp}`
+    );
 
   return await wrapper(request);
 };

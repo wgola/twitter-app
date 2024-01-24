@@ -1,10 +1,30 @@
 const { LOG, io } = require('../config');
-const { Post, FormattedPost } = require('../models');
+const { Post, FormattedPost, User } = require('../models');
 
 const getPosts = async (page, limit, timestamp) => {
   try {
     const postsAggregation = await FormattedPost.paginate(
       { createdAt: { $lt: timestamp } },
+      { page, limit }
+    );
+
+    return postsAggregation;
+  } catch (error) {
+    LOG.error(error.message);
+
+    throw new Error(`Error getting posts: ${error.message}`);
+  }
+};
+
+const getFollowsPosts = async (username, page, limit, timestamp) => {
+  try {
+    const { follows } = await User.findOne({ username });
+
+    const postsAggregation = await FormattedPost.paginate(
+      {
+        'author.username': { $in: follows },
+        createdAt: { $lt: timestamp, $gt: timestamp + 1000 * 60 * 60 * 48 }
+      },
       { page, limit }
     );
 
@@ -129,5 +149,6 @@ module.exports = {
   likePost,
   dislikePost,
   getUserPosts,
-  getUserLikes
+  getUserLikes,
+  getFollowsPosts
 };

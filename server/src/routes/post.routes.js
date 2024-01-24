@@ -3,7 +3,8 @@ const {
   createPostEndoint,
   getPostByIdEndpoint,
   getPostsEndpoint,
-  getPostCommentsEndpoint
+  getPostCommentsEndpoint,
+  getFollowsPostEndpoint
 } = require('../controllers');
 
 const router = express.Router();
@@ -11,6 +12,8 @@ const router = express.Router();
 router.post('/', createPostEndoint);
 
 router.get('/', getPostsEndpoint);
+
+router.get('/follows', getFollowsPostEndpoint);
 
 router.get('/:postId', getPostByIdEndpoint);
 

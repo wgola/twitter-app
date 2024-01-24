@@ -1,6 +1,6 @@
 import { getMainPostsRequest } from '@/services';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import _ from 'lodash';
 import { socket } from '@/config/wsClient';
 
@@ -11,10 +11,16 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
   const isFetching = ref(false);
   const timestamp = ref(new Date().getTime());
   const newPostsCount = ref(0);
+  const onlyFollowedPosts = ref(false);
 
   const loadMorePosts = async () => {
     isFetching.value = true;
-    const { data, error } = await getMainPostsRequest(currentPage.value, 10, timestamp.value);
+    const { data, error } = await getMainPostsRequest(
+      currentPage.value,
+      10,
+      timestamp.value,
+      onlyFollowedPosts.value
+    );
 
     if (error) {
       return;
@@ -38,11 +44,15 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
 
   socket.on('new-post', () => newPostsCount.value++);
 
+  watch(onlyFollowedPosts, () => refresh());
+
   const addPost = (post) => {
-    if (newPostsCount.value !== 0) {
-      refresh();
-    } else {
-      fetchedPosts.value = _.concat([post], fetchedPosts.value);
+    if (!onlyFollowedPosts.value) {
+      if (newPostsCount.value !== 0) {
+        refresh();
+      } else {
+        fetchedPosts.value = _.concat([post], fetchedPosts.value);
+      }
     }
   };
 
@@ -55,6 +65,7 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
     isFetching,
     refresh,
     newPostsCount,
-    addPost
+    addPost,
+    onlyFollowedPosts
   };
 });

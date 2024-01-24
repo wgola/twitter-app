@@ -1,4 +1,10 @@
-const { getPosts, getPostById, getPostComments, createPost } = require('../services');
+const {
+  getPosts,
+  getPostById,
+  getPostComments,
+  createPost,
+  getFollowsPosts
+} = require('../services');
 
 const getPostByIdEndpoint = async (req, res) => {
   try {
@@ -19,6 +25,20 @@ const getPostsEndpoint = async (req, res) => {
     const timestamp = req.query.timestamp || new Date().getTime();
 
     const posts = await getPosts(page, limit, timestamp);
+
+    return res.status(200).json(posts);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const getFollowsPostEndpoint = async (req, res) => {
+  try {
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 10;
+    const timestamp = req.query.timestamp || new Date().getTime();
+
+    const posts = await getFollowsPosts(req.user.username, page, limit, timestamp);
 
     return res.status(200).json(posts);
   } catch (error) {
@@ -57,5 +77,6 @@ module.exports = {
   getPostByIdEndpoint,
   getPostsEndpoint,
   getPostCommentsEndpoint,
-  createPostEndoint
+  createPostEndoint,
+  getFollowsPostEndpoint
 };
