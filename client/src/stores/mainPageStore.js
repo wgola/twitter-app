@@ -1,10 +1,13 @@
 import { getMainPostsRequest } from '@/services';
-import { defineStore } from 'pinia';
+import { defineStore, storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
 import _ from 'lodash';
 import { socket } from '@/config/wsClient';
+import { useUserStore } from './userStore.js';
 
 export const useMainPageStore = defineStore('mainPageStore', () => {
+  const userStore = useUserStore();
+
   const fetchedPosts = ref([]);
   const currentPage = ref(1);
   const hasNextPage = ref(true);
@@ -42,7 +45,16 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
     loadMorePosts();
   };
 
-  socket.on('new-post', () => newPostsCount.value++);
+  socket.on('new-post', (username) => {
+    const { currentUser } = storeToRefs(userStore);
+
+    if (
+      (onlyFollowedPosts.value && _.includes(currentUser.value.follows, username)) ||
+      !onlyFollowedPosts.value
+    ) {
+      newPostsCount.value++;
+    }
+  });
 
   watch(onlyFollowedPosts, () => refresh());
 

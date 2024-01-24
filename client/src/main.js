@@ -11,7 +11,8 @@ import {
   FaComments,
   BiChatQuoteFill,
   HiLink,
-  HiRefresh
+  HiRefresh,
+  MdPersonsearch
 } from 'oh-vue-icons/icons';
 import App from './App.vue';
 import router from './router';
@@ -26,7 +27,8 @@ addIcons(
   FaComments,
   BiChatQuoteFill,
   HiLink,
-  HiRefresh
+  HiRefresh,
+  MdPersonsearch
 );
 
 const app = createApp(App);

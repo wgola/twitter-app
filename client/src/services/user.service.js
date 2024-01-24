@@ -62,3 +62,10 @@ export const getUserLikesRequest = async (username, page, timestamp) => {
 
   return await wrapper(request);
 };
+
+export const searchUsersRequest = async (username, page) => {
+  const request = async () =>
+    await apiClient.get(`/api/user?username=${username}&page=${page}&limit=9`);
+
+  return await wrapper(request);
+};

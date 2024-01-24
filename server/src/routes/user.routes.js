@@ -7,7 +7,8 @@ const {
   getUserFollowersEndpoint,
   getUserFollowingEndpoint,
   getUserPostsEndpoint,
-  getUserLikesEndpoint
+  getUserLikesEndpoint,
+  searchUsersEndpoints
 } = require('../controllers');
 
 const router = express.Router();
@@ -19,6 +20,8 @@ router.get('/:username/details', getUserDetailsEndpoint);
 router.get('/:username', getUserGeneralDataEndpoint);
 
 router.put('/data', updateUserDataEndpoint);
+
+router.get('/', searchUsersEndpoints);
 
 router.get('/:username/followers', getUserFollowersEndpoint);
 

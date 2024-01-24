@@ -13,7 +13,8 @@ import {
   getUserFollowersRequest,
   getUserFollowingsRequest,
   getUserLikesRequest,
-  getUserPostsRequest
+  getUserPostsRequest,
+  searchUsersRequest
 } from './user.service';
 import {
   createPostRequest,
@@ -41,5 +42,6 @@ export {
   likePostRequest,
   dislikePostRequest,
   getUserLikesRequest,
-  getUserPostsRequest
+  getUserPostsRequest,
+  searchUsersRequest
 };

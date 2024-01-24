@@ -60,7 +60,6 @@ export const useThreadPageStore = defineStore('threadPageStore', () => {
   };
 
   socket.on('new-post', () => {
-    console.log('XD');
     newCommentsCount.value++;
   });
 

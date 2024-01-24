@@ -13,6 +13,9 @@
 </template>
 
 <script setup>
+import { watch } from 'vue';
+import { useRoute } from 'vue-router';
+
 const { modalId } = defineProps({
   modalId: {
     type: String,
@@ -20,7 +23,16 @@ const { modalId } = defineProps({
   }
 });
 
+const route = useRoute();
+
 const onShowModal = () => {
   document.getElementById(modalId).showModal();
 };
+
+watch(
+  () => route.fullPath,
+  () => {
+    document.getElementById(modalId).close();
+  }
+);
 </script>

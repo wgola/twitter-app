@@ -97,6 +97,34 @@ const getUserGeneralData = async (username) => {
   }
 };
 
+const searchUsers = async (username, page, limit) => {
+  try {
+    const searchUsersAggregation = User.aggregate([
+      {
+        $match: { username: new RegExp(username) }
+      },
+      {
+        $project: {
+          _id: 1,
+          username: 1,
+          firstname: 1,
+          surname: 1,
+          profilePictureUrl: '$profilePicture.url'
+        }
+      }
+    ]);
+
+    return await User.aggregatePaginate(searchUsersAggregation, {
+      page: page,
+      limit: limit
+    });
+  } catch (error) {
+    LOG.error(error.message);
+
+    throw new Error(`Error finding user '${username}': '${error.message}'`);
+  }
+};
+
 const updateProfilePicture = async (userId, profilePicture) => {
   try {
     const foundUser = await User.findById(userId);
@@ -245,5 +273,6 @@ module.exports = {
   followUser,
   unfollowUser,
   getUserFollowers,
-  getUserFollowing
+  getUserFollowing,
+  searchUsers
 };

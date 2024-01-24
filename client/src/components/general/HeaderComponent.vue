@@ -32,10 +32,11 @@
       </RouterLink>
     </div>
     <div class="navbar-center hidden lg:flex">
-      <ul class="menu menu-horizontal px-1">
-        <RouterLink to="/home" class="btn btn-wide text-xl p-2"
-          ><v-icon name="co-home" class="mt-1" />Home</RouterLink
-        >
+      <ul class="menu menu-horizontal px-1 gap-4">
+        <RouterLink to="/home" class="btn btn-wide text-xl p-2">
+          <v-icon name="co-home" class="mt-1" />Home
+        </RouterLink>
+        <SearchPeopleComponent v-if="isUserLoggedIn" />
       </ul>
     </div>
     <div class="navbar-end">
@@ -71,6 +72,7 @@ import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
 import { useUserStore } from '@/stores';
 import avatar from '@/assets/avatar.png';
+import SearchPeopleComponent from './SearchPeopleComponent.vue';
 
 const store = useUserStore();
 const router = useRouter();

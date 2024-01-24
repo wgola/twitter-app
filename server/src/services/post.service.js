@@ -23,7 +23,7 @@ const getFollowsPosts = async (username, page, limit, timestamp) => {
     const postsAggregation = await FormattedPost.paginate(
       {
         'author.username': { $in: follows },
-        createdAt: { $lt: timestamp, $gt: timestamp + 1000 * 60 * 60 * 48 }
+        createdAt: { $lt: +timestamp, $gt: +timestamp - 1000 * 60 * 60 * 48 }
       },
       { page, limit }
     );
@@ -100,9 +100,9 @@ const createPost = async (post) => {
     const formattedCreatedPost = await FormattedPost.findById(createdPost._id);
 
     if (post.parentPostId) {
-      io.to(post.parentPostId).except(post.authorUsername).emit('new-post');
+      io.to(post.parentPostId).except(post.authorUsername).emit('new-post', post.authorUsername);
     } else {
-      io.to('main-page').except(post.authorUsername).emit('new-post');
+      io.to('main-page').except(post.authorUsername).emit('new-post', post.authorUsername);
     }
 
     return formattedCreatedPost;
