@@ -83,6 +83,11 @@ const routes = [
     name: 'thread',
     component: () => import('@/views/thread/ThreadView.vue'),
     beforeEnter: [checkUserAuthorized]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import('@/views/NotFoundView.vue')
   }
 ];
 
