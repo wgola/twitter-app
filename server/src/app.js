@@ -17,7 +17,16 @@ app.use(loggingMiddleware);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: 'https://localhost:5173' }));
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        'img-src': ["'self'", 'https://ik.imagekit.io', 'data:']
+      }
+    }
+  })
+);
 app.use(cookieParser());
 app.use(fileUpload());
 app.use(sessionMiddleware);
