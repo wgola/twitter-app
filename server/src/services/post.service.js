@@ -145,7 +145,7 @@ const editPost = async (author, postId, newContent) => {
   } catch (error) {
     LOG.error(error.message);
 
-    throw new Error(`Error creating post: ${error.message}`);
+    throw new Error(`Error editing post: ${error.message}`);
   }
 };
 
@@ -190,7 +190,7 @@ const deletePost = async (username, postId) => {
   } catch (error) {
     LOG.error(error.message);
 
-    throw new Error(`Error creating post: ${error.message}`);
+    throw new Error(`Error deleting post: ${error.message}`);
   }
 };
 
