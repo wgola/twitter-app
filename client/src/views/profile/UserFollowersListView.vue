@@ -7,7 +7,7 @@
   <div
     v-else
     v-infinite-scroll="[loadMoreFollowers, { canLoadMore: () => hasNextPage, distance: 20 }]"
-    class="flex flex-wrap justify-center gap-5 m-5 w-1/2 mx-auto h-[350px] overflow-y-scroll"
+    class="flex sm:flex-wrap justify-center gap-5 m-5 sm:w-1/2 w-full mx-auto h-[350px] overflow-y-scroll"
   >
     <ShortUserComponent v-for="follower in followers" :key="follower._id" :user="follower" />
   </div>

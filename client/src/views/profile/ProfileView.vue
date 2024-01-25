@@ -2,7 +2,7 @@
   <LoadingComponent v-if="isLoading" class="mt-52" />
   <NoContentComponent v-else-if="userNotFound" message="User not found!" class="mx-auto mt-36" />
   <div v-else>
-    <div class="mx-auto w-2/3">
+    <div class="md:mx-auto md:w-2/3 w-full">
       <div class="avatar">
         <div class="w-24 rounded-full m-1 border border-accent">
           <img :src="profileData.profilePictureUrl || avatar" />
@@ -12,8 +12,8 @@
       <p class="text-2xl font-bold m-1">{{ profileData.firstname }} {{ profileData.surname }}</p>
       <p class="text-slate-500 m-1">@{{ profileData.username }}</p>
       <p class="m-2">{{ profileData.description }}</p>
-      <div class="flex justify-between mb-2">
-        <div class="flex gap-2 m-1">
+      <div class="flex justify-between mb-2 sm:flex-row flex-col">
+        <div class="flex gap-2 m-1 sm:flex-row flex-col">
           <span class="badge badge-accent p-3 m-1">
             <v-icon name="md-daterange-twotone" />&#160;Joined&#160;
             <b>{{ profileData.joinedAt.split('T')[0] }}</b>
@@ -40,23 +40,23 @@
       <ul class="menu menu-vertical lg:menu-horizontal gap-5">
         <RouterLink
           :to="`/profile/${profileData.username}/posts`"
-          :class="`${currentComponentName === 'userPosts' && 'border-b-2 border-accent'} btn`"
+          :class="`${currentComponentName === 'userPosts' ? 'border-b-2 border-accent' : ''} btn`"
           >Posts</RouterLink
         >
         <RouterLink
           :to="`/profile/${profileData.username}/likes`"
-          :class="`${currentComponentName === 'userLikes' && 'border-b-2 border-accent'} btn`"
+          :class="`${currentComponentName === 'userLikes' ? 'border-b-2 border-accent' : ''} btn`"
           >Likes</RouterLink
         >
         <RouterLink
           :to="`/profile/${profileData.username}/following`"
-          :class="`${currentComponentName === 'userFollowing' && 'border-b-2 border-accent'} btn`"
+          :class="`${currentComponentName === 'userFollowing' ? 'border-b-2 border-accent' : ''} btn`"
         >
           Following
         </RouterLink>
         <RouterLink
           :to="`/profile/${profileData.username}/followers`"
-          :class="`${currentComponentName === 'userFollowers' && 'border-b-2 border-accent'} btn`"
+          :class="`${currentComponentName === 'userFollowers' ? 'border-b-2 border-accent' : ''} btn`"
         >
           Followers
         </RouterLink>
