@@ -15,7 +15,8 @@ import {
   MdPersonsearch,
   MdLogin,
   MdLogout,
-  MdAccountcircle
+  MdAccountcircle,
+  MdDeleteforeverOutlined
 } from 'oh-vue-icons/icons';
 import App from './App.vue';
 import router from './router';
@@ -34,7 +35,8 @@ addIcons(
   MdPersonsearch,
   MdLogin,
   MdLogout,
-  MdAccountcircle
+  MdAccountcircle,
+  MdDeleteforeverOutlined
 );
 
 const app = createApp(App);

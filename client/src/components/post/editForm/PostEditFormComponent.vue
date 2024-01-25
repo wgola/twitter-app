@@ -5,14 +5,14 @@
     </template>
     <template v-slot:modal-content>
       <h3 class="font-bold text-xl uppercase text-center mb-5">
-        Add new {{ parentPostId ? 'comment' : 'post' }}
+        Edit {{ parentPostId ? 'comment' : 'post' }}
       </h3>
       <QuotedPostComponent v-if="quotedPost" :quoted-post="quotedPost" />
       <form @submit="onSubmit" class="flex flex-col justify-center">
         <TextAreaComponent name="content" label="Posts's content" />
         <p class="h-8 text-error italic text-center m-1">{{ errorMessage }}</p>
         <button :disabled="isSubmitting" class="btn btn-accent font-bold uppercase">
-          Add post
+          Edit post
         </button>
       </form>
     </template>
@@ -20,17 +20,16 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
 import { useForm } from 'vee-validate';
 import { ref } from 'vue';
-import { useMainPageStore, useThreadPageStore } from '@/stores';
 import TextAreaComponent from '@/components/general/TextAreaComponent.vue';
 import ModalComponent from '@/components/general/ModalComponent.vue';
 import QuotedPostComponent from '../QuotedPostComponent.vue';
 import validationSchema from './formValidation';
-import { createPostRequest } from '@/services';
+import { editPostRequest } from '@/services';
+import { useRouter } from 'vue-router';
 
-const { parentPostId, quotedPost, modalId } = defineProps({
+const { parentPostId, quotedPost, modalId, initialContent, postId } = defineProps({
   modalId: {
     type: String,
     required: true
@@ -42,45 +41,37 @@ const { parentPostId, quotedPost, modalId } = defineProps({
   quotedPost: {
     type: Object,
     default: null
+  },
+  initialContent: {
+    type: String,
+    required: true
+  },
+  postId: {
+    type: String,
+    required: true
   }
 });
 
-const mainPagePostsStore = useMainPageStore();
-const threadPageStore = useThreadPageStore();
-const route = useRoute();
 const router = useRouter();
-
-const { addPost } = mainPagePostsStore;
-const { addComment } = threadPageStore;
 
 const errorMessage = ref('');
 
-const { handleSubmit, isSubmitting, resetForm } = useForm({ validationSchema });
+const { handleSubmit, isSubmitting, resetForm } = useForm({
+  validationSchema,
+  initialValues: { content: initialContent }
+});
 
 const onSubmit = handleSubmit(async (values) => {
-  const newPost = {
-    parentPostId,
-    quotedPostId: quotedPost ? quotedPost._id : null,
-    content: values.content
-  };
+  const newContent = values.content;
 
-  const { data, error } = await createPostRequest(newPost);
+  const { error } = await editPostRequest(postId, newContent);
 
   if (error) {
     return;
   }
 
-  if (parentPostId) {
-    addComment(data);
-  } else {
-    if (route.fullPath !== '/home') {
-      router.push('/home');
-    }
-
-    addPost(data);
-  }
-
   resetForm();
   document.getElementById(modalId).close();
+  router.go();
 });
 </script>

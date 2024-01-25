@@ -3,7 +3,9 @@ const {
   getPostById,
   getPostComments,
   createPost,
-  getFollowsPosts
+  getFollowsPosts,
+  editPost,
+  deletePost
 } = require('../services');
 
 const getPostByIdEndpoint = async (req, res) => {
@@ -63,11 +65,39 @@ const getPostCommentsEndpoint = async (req, res) => {
 
 const createPostEndoint = async (req, res) => {
   try {
+    const author = req.user.username;
     const postToCreate = req.body;
 
-    const createdPost = await createPost(postToCreate);
+    const createdPost = await createPost(author, postToCreate);
 
     return res.status(201).json(createdPost);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const editPostEndpoint = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const author = req.user.username;
+    const newContent = req.body.newContent;
+
+    const editedPost = await editPost(author, postId, newContent);
+
+    return res.status(201).json(editedPost);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const deletePostEndpoint = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const author = req.user.username;
+
+    await deletePost(author, postId);
+
+    return res.sendStatus(201);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -78,5 +108,7 @@ module.exports = {
   getPostsEndpoint,
   getPostCommentsEndpoint,
   createPostEndoint,
-  getFollowsPostEndpoint
+  getFollowsPostEndpoint,
+  editPostEndpoint,
+  deletePostEndpoint
 };

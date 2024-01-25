@@ -8,7 +8,7 @@
       :no-content-message="posts.length === 0 ? 'No posts yet!' : 'No more posts!'"
       class="max-h-[400px]"
     >
-      <PostComponent v-for="post in posts" :key="post._id" :post="post" />
+      <PostComponent v-for="post in posts" :key="post._id" :post="post" :is-profile-page="true" />
     </InfiniteScrollListComponent>
   </div>
 </template>

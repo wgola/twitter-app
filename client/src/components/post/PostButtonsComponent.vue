@@ -9,7 +9,7 @@
     <RouterLink :to="`/thread/${post._id}`">
       <span><v-icon name="fa-comments" class="h-5 w-5 mx-1" />{{ post.commentsCount }}</span>
     </RouterLink>
-    <PostFormComponent :quoted-post="post" :modal-id="post._id">
+    <PostFormComponent :quoted-post="post" :modal-id="`${post._id}-quote`">
       <button>
         <span>
           <v-icon name="bi-chat-quote-fill" class="h-5 w-5 mx-1" />{{ post.quotationsCount }}

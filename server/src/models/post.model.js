@@ -23,10 +23,25 @@ const postSchema = new Schema(
       immutable: true
     },
     content: {
-      type: String,
-      required: true,
-      trim: true,
-      max: 255
+      original: {
+        type: String,
+        required: true,
+        trim: true,
+        max: 255
+      },
+      edited: {
+        type: String,
+        default: '',
+        trim: true,
+        max: 255
+      }
+    },
+    contentEditedAt: {
+      type: Date
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false
     },
     likes: [
       {
@@ -116,6 +131,8 @@ FormattedPost.createCollection({
         _id: 1,
         createdAt: 1,
         updatedAt: 1,
+        contentEditedAt: 1,
+        isDeleted: 1,
         content: 1,
         likes: 1,
         commentsCount: { $size: '$comments' },
@@ -133,6 +150,8 @@ FormattedPost.createCollection({
           content: '$quotedPost.content',
           createdAt: '$quotedPost.createdAt',
           updatedAt: '$quotedPost.updatedAt',
+          contentEditedAt: '$quotedPost.contentEditedAt',
+          isDeleted: '$quotedPost.isDeleted',
           author: {
             _id: '$quotedPostAuthor._id',
             username: '$quotedPostAuthor.username',

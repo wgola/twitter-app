@@ -21,7 +21,9 @@ import {
   getMainPostsRequest,
   getPostByIdRequest,
   likePostRequest,
-  dislikePostRequest
+  dislikePostRequest,
+  editPostRequest,
+  deletePostRequest
 } from './post.service';
 
 export {
@@ -43,5 +45,7 @@ export {
   dislikePostRequest,
   getUserLikesRequest,
   getUserPostsRequest,
-  searchUsersRequest
+  searchUsersRequest,
+  editPostRequest,
+  deletePostRequest
 };

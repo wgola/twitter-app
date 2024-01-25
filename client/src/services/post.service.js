@@ -39,3 +39,15 @@ export const likePostRequest = async (postId) => {
 export const dislikePostRequest = async (postId) => {
   return await socket.emitWithAck('dislike', postId);
 };
+
+export const editPostRequest = async (postId, newContent) => {
+  const request = async () => await apiClient.put(`/api/posts/${postId}`, { newContent });
+
+  return await wrapper(request);
+};
+
+export const deletePostRequest = async (postId) => {
+  const request = async () => await apiClient.delete(`/api/posts/${postId}`);
+
+  return await wrapper(request);
+};

@@ -1,18 +1,15 @@
 <template>
+  <div v-if="post.isDeleted">
+    <NoContentComponent message="This post was deleted!" />
+  </div>
   <div
+    v-else
     class="flex flex-col bg-base-200 md:mx-5 mx-0 lg:w-[65ch] md:w-[70ch] w-full rounded-2xl border border-gray-500"
   >
-    <ParentPostLinkComponent
-      v-if="post.parentPostId && !isComment"
-      :parent-post-id="post.parentPostId"
-    />
-    <PostHeaderComponent :author="post.author" />
+    <ParentPostLinkComponent v-if="post.parentPostId && !isComment" :post="post" />
+    <PostHeaderComponent :post="post" :is-profile-page="isProfilePage" />
     <QuotedPostComponent v-if="post.quotedPost" :quoted-post="post.quotedPost" />
-    <PostContentComponent
-      :content="post.content"
-      :created-at="post.createdAt"
-      :updated-at="post.updatedAt"
-    />
+    <PostContentComponent :post="post" />
     <PostButtonsComponent :post="post" />
   </div>
 </template>
@@ -23,6 +20,7 @@ import PostContentComponent from './PostContentComponent.vue';
 import QuotedPostComponent from './QuotedPostComponent.vue';
 import PostButtonsComponent from './PostButtonsComponent.vue';
 import ParentPostLinkComponent from './ParentPostLinkComponent.vue';
+import NoContentComponent from '../general/NoContentComponent.vue';
 
 defineProps({
   post: {
@@ -30,6 +28,10 @@ defineProps({
     required: true
   },
   isComment: {
+    type: Boolean,
+    default: false
+  },
+  isProfilePage: {
     type: Boolean,
     default: false
   }

@@ -1,10 +1,10 @@
 <template>
   <LoadingComponent v-if="isFetchingPost" />
   <div v-else>
-    <div class="md:w-fit md:mx-auto">
+    <div class="md:w-fit md:mx-auto mb-5">
       <PostComponent :post="post" />
     </div>
-    <div class="flex gap-5 mb-5 sm:flex-row flex-col mx-auto w-fit my-5">
+    <div v-if="!post.isDeleted" class="flex gap-5 sm:flex-row flex-col mx-auto w-fit mb-5">
       <PostFormComponent :modal-id="`${post._id}-comment`" :parent-post-id="post._id">
         <button class="btn btn-wide btn-accent uppercase">
           <v-icon name="fa-regular-edit" />Add comment
@@ -26,7 +26,7 @@
       :is-fetching="isFetchingComments"
       :is-no-content="!hasNextPage"
       :no-content-message="comments.length === 0 ? 'No comments yet!' : 'No more comments!'"
-      class="sm:max-h-[430px] max-h-[300px]"
+      :style="post.isDeleted ? 'height: 65vh' : 'height: 42vh'"
     >
       <PostComponent
         v-for="comment in comments"

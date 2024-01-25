@@ -20,7 +20,7 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
     isFetching.value = true;
     const { data, error } = await getMainPostsRequest(
       currentPage.value,
-      10,
+      5,
       timestamp.value,
       onlyFollowedPosts.value
     );

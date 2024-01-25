@@ -4,7 +4,9 @@ const {
   getPostByIdEndpoint,
   getPostsEndpoint,
   getPostCommentsEndpoint,
-  getFollowsPostEndpoint
+  getFollowsPostEndpoint,
+  editPostEndpoint,
+  deletePostEndpoint
 } = require('../controllers');
 
 const router = express.Router();
@@ -16,6 +18,10 @@ router.get('/', getPostsEndpoint);
 router.get('/follows', getFollowsPostEndpoint);
 
 router.get('/:postId', getPostByIdEndpoint);
+
+router.put('/:postId', editPostEndpoint);
+
+router.delete('/:postId', deletePostEndpoint);
 
 router.get('/:postId/comments', getPostCommentsEndpoint);
 
