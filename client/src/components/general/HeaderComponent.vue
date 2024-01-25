@@ -22,9 +22,10 @@
           tabindex="0"
           class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
         >
-          <RouterLink to="/home" class="btn btn-wide text-xl p-2">
+          <RouterLink to="/home" class="btn text-xl p-2">
             <v-icon name="co-home" class="mt-1" />Home</RouterLink
           >
+          <SearchPeopleComponent v-if="isUserLoggedIn" :is-short="true" />
         </ul>
       </div>
       <RouterLink to="/">
@@ -51,15 +52,27 @@
           class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-300 rounded-box w-52"
           v-if="isUserLoggedIn"
         >
-          <li><RouterLink :to="`/profile/${currentUserData.username}`">Profile</RouterLink></li>
-          <li><button @click="logOut">Logout</button></li>
+          <li>
+            <RouterLink :to="`/profile/${currentUserData.username}`" class="btn text-xl p-2">
+              <v-icon name="md-accountcircle" class="mt-1" />Profile</RouterLink
+            >
+          </li>
+          <li>
+            <button @click="logOut" class="btn text-xl p-2">
+              <v-icon name="md-logout" class="mt-1" />Logout
+            </button>
+          </li>
         </ul>
         <ul
           tabindex="0"
           class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-300 rounded-box w-52"
           v-else
         >
-          <li><RouterLink to="/login">Log in</RouterLink></li>
+          <li>
+            <RouterLink to="/login" class="btn text-xl p-2">
+              <v-icon name="md-login" class="mt-1" />Log in</RouterLink
+            >
+          </li>
         </ul>
       </div>
     </div>
@@ -67,7 +80,7 @@
 </template>
 
 <script setup>
-import { RouterLink, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
 import { useUserStore } from '@/stores';

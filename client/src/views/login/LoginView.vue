@@ -1,21 +1,24 @@
 <template>
-  <div class="mx-auto w-2/5 bg-base-300 px-10 py-5 rounded-lg">
+  <div class="mx-auto lg:w-3/5 md:w-4/5 w-full bg-base-300 sm:px-10 px-1 py-5 rounded-lg">
     <h1 class="text-3xl font-bold text-center my-10 uppercase">Log in</h1>
     <form @submit="onSubmit" autocomplete="off">
       <InputComponent name="username" type="text" label="Username" />
       <InputComponent name="password" type="password" label="Password" />
-      <p class="text-error h-8 m-2 text-center text-xl">
+      <p class="text-error m-3 text-center text-xl">
         {{ loginError }}
       </p>
-      <div class="flex justify-around">
+      <div class="flex flex-col w-full lg:flex-row">
         <button
           type="submit"
-          class="btn btn-success btn-lg uppercase font-bold"
+          class="btn btn-success btn-lg uppercase font-bold grid flex-grow h-20 rounded-box place-items-center"
           :disabled="isSubmitting"
         >
           Log in
         </button>
-        <RouterLink to="/register" class="btn btn-accent btn-lg uppercase font-bold"
+        <div class="divider lg:divider-horizontal">OR</div>
+        <RouterLink
+          to="/register"
+          class="btn btn-accent btn-lg uppercase font-bold grid flex-grow h-20 rounded-box place-items-center"
           >Register</RouterLink
         >
       </div>
@@ -24,7 +27,7 @@
 </template>
 
 <script setup>
-import { RouterLink, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useForm } from 'vee-validate';
 import { ref } from 'vue';
 import validationSchema from './loginValidation';

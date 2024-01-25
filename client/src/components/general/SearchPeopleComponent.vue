@@ -1,7 +1,7 @@
 <template>
   <ModalComponent modal-id="search">
     <template v-slot:modal-button>
-      <div class="btn btn-wide text-xl p-2">
+      <div :class="`btn ${isShort ? 'w-full' : 'btn-wide'} text-xl p-2`">
         <v-icon name="md-personsearch" class="mt-1" />
         Search
       </div>
@@ -38,6 +38,13 @@ import { computed, ref, watch } from 'vue';
 import { searchUsersRequest } from '@/services';
 import ShortUserComponent from '../profile/ShortUserComponent.vue';
 import { useDebounceFn } from '@vueuse/core';
+
+defineProps({
+  isShort: {
+    type: Boolean,
+    default: false
+  }
+});
 
 const username = ref('');
 const hasNextPage = ref(false);

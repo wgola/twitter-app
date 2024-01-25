@@ -1,17 +1,21 @@
 <template>
-  <div class="flex py-1 px-3 border-b border-b-gray-500">
-    <div class="avatar m-2">
-      <div class="w-14 rounded-full">
-        <img :src="author.profilePictureUrl || avatar" />
+  <div
+    class="flex w-full flex-col sm:flex-row justify-between py-1 px-3 border-b border-b-gray-500"
+  >
+    <div class="flex">
+      <div class="avatar m-2">
+        <div class="w-14 rounded-full">
+          <img :src="author.profilePictureUrl || avatar" />
+        </div>
       </div>
-    </div>
-    <div class="flex justify-between w-full">
       <div class="flex flex-col m-2">
         <p class="font-bold">{{ author.firstname }} {{ author.surname }}</p>
         <RouterLink :to="`/profile/${author.username}`" class="hover:link">
           @{{ author.username }}
         </RouterLink>
       </div>
+    </div>
+    <div class="my-auto">
       <button
         v-if="!isCurrentUser"
         class="btn btn-accent uppercase my-auto btn-sm"

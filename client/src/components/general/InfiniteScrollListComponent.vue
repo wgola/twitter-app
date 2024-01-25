@@ -1,7 +1,7 @@
 <template>
   <div
     v-infinite-scroll="[loadMoreData, { canLoadMore, distance: 20 }]"
-    class="flex flex-col gap-5 max-w-fit mx-auto overflow-y-scroll"
+    class="flex flex-col md:w-fit md:mx-auto gap-5 overflow-y-scroll"
   >
     <slot />
     <LoadingComponent v-if="isFetching" />
@@ -12,7 +12,7 @@
 <script setup>
 import { vInfiniteScroll } from '@vueuse/components';
 import LoadingComponent from './LoadingComponent.vue';
-import { NoContentComponent } from '..';
+import NoContentComponent from '../general/NoContentComponent.vue';
 
 defineProps({
   loadMoreData: {

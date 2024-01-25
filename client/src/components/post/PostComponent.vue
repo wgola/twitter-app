@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-col bg-base-200 mx-5 w-[65ch] rounded-2xl border border-gray-500">
+  <div
+    class="flex flex-col bg-base-200 md:mx-5 mx-0 lg:w-[65ch] md:w-[70ch] w-full rounded-2xl border border-gray-500"
+  >
     <ParentPostLinkComponent
       v-if="post.parentPostId && !isComment"
       :parent-post-id="post.parentPostId"

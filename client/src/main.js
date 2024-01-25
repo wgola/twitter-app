@@ -12,7 +12,10 @@ import {
   BiChatQuoteFill,
   HiLink,
   HiRefresh,
-  MdPersonsearch
+  MdPersonsearch,
+  MdLogin,
+  MdLogout,
+  MdAccountcircle
 } from 'oh-vue-icons/icons';
 import App from './App.vue';
 import router from './router';
@@ -28,7 +31,10 @@ addIcons(
   BiChatQuoteFill,
   HiLink,
   HiRefresh,
-  MdPersonsearch
+  MdPersonsearch,
+  MdLogin,
+  MdLogout,
+  MdAccountcircle
 );
 
 const app = createApp(App);

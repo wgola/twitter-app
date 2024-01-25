@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="flex flex-col w-fit mx-auto">
-      <div class="flex gap-5 mb-5">
+      <div class="flex gap-5 mb-5 sm:flex-row flex-col">
         <PostFormComponent modal-id="newPost">
           <button class="btn btn-wide btn-accent uppercase">
             <v-icon name="fa-regular-edit" />Add new post
@@ -31,7 +31,7 @@
       :is-fetching="isFetching"
       :is-no-content="!hasNextPage"
       no-content-message="No more posts!"
-      class="max-h-[630px]"
+      class="sm:max-h-[600px] max-h-[530px]"
     >
       <PostComponent v-for="post in fetchedPosts" :key="post._id" :post="post" />
     </InfiniteScrollListComponent>

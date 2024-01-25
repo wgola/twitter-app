@@ -1,5 +1,5 @@
 const passportLocal = require('passport-local');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { getUserDetails } = require('./user.service');
 const { User } = require('../models');
 

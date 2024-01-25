@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { saveFile, deleteFile } = require('./storage.service');
 const { User } = require('../models');
 const { LOG } = require('../config');
