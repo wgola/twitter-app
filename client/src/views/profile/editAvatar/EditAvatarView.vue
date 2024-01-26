@@ -16,6 +16,7 @@
           type="file"
           class="file-input file-input-bordered w-full my-5"
           required
+          accept="image/*"
         />
         <p class="h-8 text-error italic text-center m-1">{{ errorMessage }}</p>
         <button :disabled="isSubmitting" class="btn btn-accent font-bold uppercase">Update</button>

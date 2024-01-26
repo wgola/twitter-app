@@ -69,6 +69,7 @@ const toggleMessage = computed(() =>
 
 onMounted(() => {
   socket.emit('join-room', 'main-page');
+  refresh();
 });
 
 onUnmounted(() => {
