@@ -51,3 +51,21 @@ export const deletePostRequest = async (postId) => {
 
   return await wrapper(request);
 };
+
+export const getMainNewPostsRequest = async (page, limit, timestamp, isOnlyFollows) => {
+  const request = async () =>
+    await apiClient.get(
+      `/api/posts/new${isOnlyFollows ? '/follows' : ''}?page=${page}&limit=${limit}&timestamp=${timestamp}`
+    );
+
+  return await wrapper(request);
+};
+
+export const getPostNewCommentsRequest = async (postId, page, limit, timestamp) => {
+  const request = async () =>
+    await apiClient.get(
+      `/api/posts/${postId}/newComments?page=${page}&limit=${limit}&timestamp=${timestamp}`
+    );
+
+  return await wrapper(request);
+};

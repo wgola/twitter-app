@@ -16,6 +16,21 @@ const getPosts = async (page, limit, timestamp) => {
   }
 };
 
+const getNewPosts = async (page, limit, timestamp) => {
+  try {
+    const postsAggregation = await FormattedPost.paginate(
+      { createdAt: { $gt: timestamp }, isDeleted: false },
+      { page, limit, sort: { createdAt: 1 } }
+    );
+
+    return postsAggregation;
+  } catch (error) {
+    LOG.error(error.message);
+
+    throw new Error(`Error getting posts: ${error.message}`);
+  }
+};
+
 const getFollowsPosts = async (username, page, limit, timestamp) => {
   try {
     const { follows } = await User.findOne({ username });
@@ -27,6 +42,27 @@ const getFollowsPosts = async (username, page, limit, timestamp) => {
         isDeleted: false
       },
       { page, limit }
+    );
+
+    return postsAggregation;
+  } catch (error) {
+    LOG.error(error.message);
+
+    throw new Error(`Error getting posts: ${error.message}`);
+  }
+};
+
+const getNewFollowsPosts = async (username, page, limit, timestamp) => {
+  try {
+    const { follows } = await User.findOne({ username });
+
+    const postsAggregation = await FormattedPost.paginate(
+      {
+        'author.username': { $in: follows },
+        createdAt: { $gt: timestamp },
+        isDeleted: false
+      },
+      { page, limit, sort: { createdAt: 1 } }
     );
 
     return postsAggregation;
@@ -94,6 +130,21 @@ const getPostComments = async (postId, page, limit, timestamp) => {
   }
 };
 
+const getNewPostComments = async (postId, page, limit, timestamp) => {
+  try {
+    const postComments = await FormattedPost.paginate(
+      { parentPostId: postId, createdAt: { $gt: timestamp }, isDeleted: false },
+      { page, limit, sort: { createdAt: 1 } }
+    );
+
+    return postComments;
+  } catch (error) {
+    LOG.error(error.message);
+
+    throw new Error(`Error getting post comments: ${error.message}`);
+  }
+};
+
 const createPost = async (author, post) => {
   try {
     const postToCreate = {
@@ -112,7 +163,7 @@ const createPost = async (author, post) => {
     if (postToCreate.parentPostId) {
       io.to(postToCreate.parentPostId)
         .except(postToCreate.authorUsername)
-        .emit('new-post', postToCreate.authorUsername);
+        .emit('new-comment', postToCreate.authorUsername);
     } else {
       io.to('main-page')
         .except(postToCreate.authorUsername)
@@ -205,5 +256,8 @@ module.exports = {
   getUserLikes,
   getFollowsPosts,
   editPost,
-  deletePost
+  deletePost,
+  getNewPosts,
+  getNewFollowsPosts,
+  getNewPostComments
 };

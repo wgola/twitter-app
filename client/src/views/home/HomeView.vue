@@ -15,6 +15,7 @@
         </button>
       </div>
       <div class="flex mb-5">
+        <span :class="`${!onlyFollowedPosts && 'text-accent'} mx-2`">All posts</span>
         <input
           type="checkbox"
           class="toggle toggle-accent"
@@ -22,19 +23,22 @@
           :true-value="true"
           :false-value="false"
         />
-        <span :class="`${onlyFollowedPosts && 'text-accent'} mx-2`">{{ toggleMessage }}</span>
+        <span :class="`${onlyFollowedPosts && 'text-accent'} mx-2`"> Following posts only </span>
       </div>
     </div>
-    <InfiniteScrollListComponent
-      :load-more-data="loadMorePosts"
-      :can-load-more="() => hasNextPage"
-      :is-fetching="isFetching"
-      :is-no-content="!hasNextPage"
+    <BiDirectionalInfiniteScrollListComponent
+      :load-more-data-bottom="loadMorePostsBottom"
+      :load-more-data-top="loadMorePostsTop"
+      :can-load-more-bottom="() => hasNextPageBottom && !isFetchingBottom"
+      :can-load-more-top="() => newPostsCount > 0 && hasNextPageTop && !isFetchingTop"
+      :is-fetching-bottom="isFetchingBottom"
+      :is-fetching-top="isFetchingTop"
+      :is-no-content="!hasNextPageBottom"
       no-content-message="No more posts!"
       style="height: 65vh"
     >
       <PostComponent v-for="post in fetchedPosts" :key="post._id" :post="post" />
-    </InfiniteScrollListComponent>
+    </BiDirectionalInfiniteScrollListComponent>
     <AlertComponent
       message="There are new posts!"
       :is-shown="showAlert"
@@ -44,7 +48,7 @@
 </template>
 
 <script setup>
-import { onUnmounted, onMounted, watch, ref, computed } from 'vue';
+import { onUnmounted, onMounted, watch, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMainPageStore } from '@/stores';
 import { socket } from '@/config/wsClient';
@@ -52,20 +56,23 @@ import {
   AlertComponent,
   PostComponent,
   PostFormComponent,
-  InfiniteScrollListComponent
+  BiDirectionalInfiniteScrollListComponent
 } from '@/components';
 
 const store = useMainPageStore();
 
-const { loadMorePosts, refresh } = store;
+const { loadMorePostsBottom, loadMorePostsTop, refresh } = store;
 
-const { fetchedPosts, hasNextPage, isFetching, newPostsCount, onlyFollowedPosts } =
-  storeToRefs(store);
+const {
+  fetchedPosts,
+  hasNextPageBottom,
+  hasNextPageTop,
+  isFetchingBottom,
+  isFetchingTop,
+  newPostsCount,
+  onlyFollowedPosts
+} = storeToRefs(store);
 const showAlert = ref(false);
-
-const toggleMessage = computed(() =>
-  onlyFollowedPosts.value ? 'Followers posts only' : 'All posts'
-);
 
 onMounted(() => {
   socket.emit('join-room', 'main-page');

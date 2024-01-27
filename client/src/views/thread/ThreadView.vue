@@ -20,11 +20,14 @@
         }}</span>
       </button>
     </div>
-    <InfiniteScrollListComponent
-      :load-more-data="loadMoreComments"
-      :can-load-more="() => hasNextPage"
-      :is-fetching="isFetchingComments"
-      :is-no-content="!hasNextPage"
+    <BiDirectionalInfiniteScrollListComponent
+      :load-more-data-bottom="loadMoreCommentsBottom"
+      :load-more-data-top="loadMoreCommentsTop"
+      :can-load-more-bottom="() => hasNextPageBottom"
+      :can-load-more-top="() => newCommentsCount > 0 && hasNextPageTop && !isFetchingCommentsTop"
+      :is-fetching-bottom="isFetchingCommentsBottom"
+      :is-fetching-top="isFetchingCommentsTop"
+      :is-no-content="!hasNextPageBottom"
       :no-content-message="comments.length === 0 ? 'No comments yet!' : 'No more comments!'"
       :style="post.isDeleted ? 'height: 65vh' : 'height: 42vh'"
     >
@@ -34,7 +37,7 @@
         :post="comment"
         :is-comment="true"
       />
-    </InfiniteScrollListComponent>
+    </BiDirectionalInfiniteScrollListComponent>
     <AlertComponent
       message="There are new comments!"
       :is-shown="showAlert"
@@ -53,16 +56,24 @@ import {
   PostComponent,
   PostFormComponent,
   AlertComponent,
-  InfiniteScrollListComponent
+  BiDirectionalInfiniteScrollListComponent
 } from '@/components';
 import { socket } from '@/config/wsClient';
 
 const store = useThreadPageStore();
 
-const { loadMoreComments, refresh } = store;
+const { loadMoreCommentsBottom, loadMoreCommentsTop, refresh } = store;
 
-const { post, comments, hasNextPage, isFetchingPost, isFetchingComments, newCommentsCount } =
-  storeToRefs(store);
+const {
+  post,
+  comments,
+  hasNextPageBottom,
+  hasNextPageTop,
+  isFetchingPost,
+  isFetchingCommentsTop,
+  isFetchingCommentsBottom,
+  newCommentsCount
+} = storeToRefs(store);
 
 const threadId = ref('');
 const showAlert = ref(false);
@@ -84,8 +95,7 @@ watch(
   { immediate: true }
 );
 
-watch(newCommentsCount, (newValue) => {
-  console.log(newValue);
+watch(newCommentsCount, () => {
   if (newCommentsCount.value === 1) {
     showAlert.value = true;
     setTimeout(() => {

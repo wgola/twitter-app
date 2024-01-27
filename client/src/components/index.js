@@ -7,6 +7,7 @@ import ModalComponent from './general/ModalComponent.vue';
 import NoContentComponent from './general/NoContentComponent.vue';
 import TextAreaComponent from './general/TextAreaComponent.vue';
 import InfiniteScrollListComponent from './general/InfiniteScrollListComponent.vue';
+import BiDirectionalInfiniteScrollListComponent from './general/BiDirectionalInfiniteScrollListComponent.vue';
 
 import ParentPostLinkComponent from './post/ParentPostLinkComponent.vue';
 import PostButtonsComponent from './post/PostButtonsComponent.vue';
@@ -36,5 +37,6 @@ export {
   QuotedPostComponent,
   PostFormComponent,
   ShortUserComponent,
-  InfiniteScrollListComponent
+  InfiniteScrollListComponent,
+  BiDirectionalInfiniteScrollListComponent
 };

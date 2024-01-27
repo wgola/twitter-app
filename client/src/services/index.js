@@ -23,7 +23,10 @@ import {
   likePostRequest,
   dislikePostRequest,
   editPostRequest,
-  deletePostRequest
+  deletePostRequest,
+  getMainNewPostsRequest,
+  getPostNewCommentsRequest,
+  getPostCommentsRequest
 } from './post.service';
 
 export {
@@ -47,5 +50,8 @@ export {
   getUserPostsRequest,
   searchUsersRequest,
   editPostRequest,
-  deletePostRequest
+  deletePostRequest,
+  getMainNewPostsRequest,
+  getPostNewCommentsRequest,
+  getPostCommentsRequest
 };

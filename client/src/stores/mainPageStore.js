@@ -1,4 +1,4 @@
-import { getMainPostsRequest } from '@/services';
+import { getMainNewPostsRequest, getMainPostsRequest } from '@/services';
 import { defineStore, storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
 import _ from 'lodash';
@@ -9,19 +9,24 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
   const userStore = useUserStore();
 
   const fetchedPosts = ref([]);
-  const currentPage = ref(1);
-  const hasNextPage = ref(true);
-  const isFetching = ref(false);
-  const timestamp = ref(new Date().getTime());
+  const currentPageBottom = ref(1);
+  const currentPageTop = ref(1);
+  const hasNextPageBottom = ref(true);
+  const hasNextPageTop = ref(false);
+  const isFetchingBottom = ref(false);
+  const isFetchingTop = ref(false);
+  const timestampBottom = ref(new Date().getTime());
+  const timestampTop = ref(new Date().getTime());
   const newPostsCount = ref(0);
   const onlyFollowedPosts = ref(false);
 
-  const loadMorePosts = async () => {
-    isFetching.value = true;
+  const loadMorePostsBottom = async () => {
+    isFetchingBottom.value = true;
+
     const { data, error } = await getMainPostsRequest(
-      currentPage.value,
+      currentPageBottom.value,
       5,
-      timestamp.value,
+      timestampBottom.value,
       onlyFollowedPosts.value
     );
 
@@ -29,20 +34,43 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
       return;
     }
 
-    isFetching.value = false;
+    isFetchingBottom.value = false;
     fetchedPosts.value = _.concat(fetchedPosts.value, data.docs);
-    hasNextPage.value = data.hasNextPage;
-    currentPage.value++;
+    hasNextPageBottom.value = data.hasNextPage;
+    currentPageBottom.value++;
+  };
+
+  const loadMorePostsTop = async () => {
+    isFetchingTop.value = true;
+    const { data, error } = await getMainNewPostsRequest(
+      currentPageTop.value,
+      5,
+      timestampTop.value,
+      onlyFollowedPosts.value
+    );
+
+    if (error) {
+      return;
+    }
+
+    isFetchingTop.value = false;
+    newPostsCount.value -= data.docs.length;
+    fetchedPosts.value = _.concat(data.docs.reverse(), fetchedPosts.value);
+    hasNextPageTop.value = data.hasNextPage;
+    currentPageTop.value++;
   };
 
   const refresh = () => {
     fetchedPosts.value = [];
-    currentPage.value = 1;
-    hasNextPage.value = true;
+    currentPageBottom.value = 1;
+    currentPageTop.value = 1;
+    hasNextPageBottom.value = true;
+    hasNextPageTop.value = false;
     newPostsCount.value = 0;
-    timestamp.value = new Date().getTime();
+    timestampBottom.value = new Date().getTime();
+    timestampTop.value = new Date().getTime();
 
-    loadMorePosts();
+    loadMorePostsBottom();
   };
 
   socket.on('new-post', (username) => {
@@ -52,6 +80,9 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
       (onlyFollowedPosts.value && _.includes(currentUser.value.follows, username)) ||
       !onlyFollowedPosts.value
     ) {
+      timestampTop.value = new Date(fetchedPosts.value[0].createdAt).getTime();
+      currentPageTop.value = 1;
+      hasNextPageTop.value = true;
       newPostsCount.value++;
     }
   });
@@ -69,15 +100,20 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
   };
 
   return {
-    timestamp,
+    timestampBottom,
     fetchedPosts,
-    currentPage,
-    hasNextPage,
-    loadMorePosts,
-    isFetching,
+    currentPageBottom,
+    hasNextPageBottom,
+    loadMorePostsBottom,
+    isFetchingBottom,
     refresh,
     newPostsCount,
     addPost,
-    onlyFollowedPosts
+    onlyFollowedPosts,
+    currentPageTop,
+    hasNextPageTop,
+    isFetchingTop,
+    timestampTop,
+    loadMorePostsTop
   };
 });
