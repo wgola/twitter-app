@@ -8,7 +8,8 @@ const {
   deletePost,
   getNewPosts,
   getNewFollowsPosts,
-  getNewPostComments
+  getNewPostComments,
+  getPostParents
 } = require('../services');
 
 const getPostByIdEndpoint = async (req, res) => {
@@ -149,6 +150,20 @@ const deletePostEndpoint = async (req, res) => {
   }
 };
 
+const getPostWithParentsEndpoint = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 10;
+
+    const posts = await getPostParents(postId, page, limit);
+
+    return res.status(200).json(posts);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPostByIdEndpoint,
   getPostsEndpoint,
@@ -159,5 +174,6 @@ module.exports = {
   deletePostEndpoint,
   getNewPostsEndpoint,
   getNewFollowsPostEndpoint,
-  getNewPostCommentsEndpoint
+  getNewPostCommentsEndpoint,
+  getPostWithParentsEndpoint
 };

@@ -26,7 +26,8 @@ import {
   deletePostRequest,
   getMainNewPostsRequest,
   getPostNewCommentsRequest,
-  getPostCommentsRequest
+  getPostCommentsRequest,
+  getPostParentsRequest
 } from './post.service';
 
 export {
@@ -53,5 +54,6 @@ export {
   deletePostRequest,
   getMainNewPostsRequest,
   getPostNewCommentsRequest,
-  getPostCommentsRequest
+  getPostCommentsRequest,
+  getPostParentsRequest
 };

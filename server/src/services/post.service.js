@@ -1,5 +1,8 @@
 const { LOG, io } = require('../config');
 const { Post, FormattedPost, User } = require('../models');
+const {
+  Types: { ObjectId }
+} = require('mongoose');
 
 const getPosts = async (page, limit, timestamp) => {
   try {
@@ -164,11 +167,11 @@ const createPost = async (author, post) => {
       io.to(postToCreate.parentPostId)
         .except(postToCreate.authorUsername)
         .emit('new-comment', postToCreate.authorUsername);
-    } else {
-      io.to('main-page')
-        .except(postToCreate.authorUsername)
-        .emit('new-post', postToCreate.authorUsername);
     }
+
+    io.to('main-page')
+      .except(postToCreate.authorUsername)
+      .emit('new-post', postToCreate.authorUsername);
 
     return formattedCreatedPost;
   } catch (error) {
@@ -245,6 +248,50 @@ const deletePost = async (username, postId) => {
   }
 };
 
+const getPostParents = async (postId, page, limit) => {
+  try {
+    const aggregation = FormattedPost.aggregate([
+      {
+        $match: {
+          _id: new ObjectId(postId)
+        }
+      },
+      {
+        $graphLookup: {
+          from: 'formattedposts',
+          startWith: '$parentPostId',
+          connectFromField: 'parentPostId',
+          connectToField: '_id',
+          as: 'ancestors'
+        }
+      },
+      {
+        $project: {
+          ancestors: 1
+        }
+      },
+      {
+        $unwind: '$ancestors'
+      },
+      {
+        $replaceRoot: { newRoot: '$ancestors' }
+      }
+    ]);
+
+    const postComments = await FormattedPost.aggregatePaginate(aggregation, {
+      page,
+      limit,
+      sort: { createdAt: -1 }
+    });
+
+    return postComments;
+  } catch (error) {
+    LOG.error(error.message);
+
+    throw new Error(`Error getting post comments: ${error.message}`);
+  }
+};
+
 module.exports = {
   getPostById,
   getPosts,
@@ -259,5 +306,6 @@ module.exports = {
   deletePost,
   getNewPosts,
   getNewFollowsPosts,
-  getNewPostComments
+  getNewPostComments,
+  getPostParents
 };

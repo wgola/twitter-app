@@ -69,3 +69,10 @@ export const getPostNewCommentsRequest = async (postId, page, limit, timestamp) 
 
   return await wrapper(request);
 };
+
+export const getPostParentsRequest = async (postId, page, limit) => {
+  const request = async () =>
+    await apiClient.get(`/api/posts/${postId}/parents?page=${page}&limit=${limit}`);
+
+  return await wrapper(request);
+};

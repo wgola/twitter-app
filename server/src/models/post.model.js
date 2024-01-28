@@ -6,6 +6,7 @@ const {
   model
 } = require('mongoose');
 const paginate = require('mongoose-paginate-v2');
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const postSchema = new Schema(
   {
@@ -53,6 +54,7 @@ const postSchema = new Schema(
 );
 
 postSchema.plugin(paginate);
+postSchema.plugin(aggregatePaginate);
 
 const Post = model('Post', postSchema);
 

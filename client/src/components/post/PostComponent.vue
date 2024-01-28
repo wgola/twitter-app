@@ -6,9 +6,12 @@
     v-else
     class="flex flex-col bg-base-200 md:mx-5 mx-0 lg:w-[65ch] md:w-[70ch] w-full rounded-2xl border border-gray-500"
   >
-    <ParentPostLinkComponent v-if="post.parentPostId && !isComment" :post="post" />
+    <ParentPostLinkComponent v-if="post.parentPostId && !isThreadPage" :post="post" />
     <PostHeaderComponent :post="post" :is-profile-page="isProfilePage" />
-    <QuotedPostComponent v-if="post.quotedPost" :quoted-post="post.quotedPost" />
+    <QuotedPostComponent
+      v-if="!_.isEmpty(post?.quotedPost?.author)"
+      :quoted-post="post.quotedPost"
+    />
     <PostContentComponent :post="post" />
     <PostButtonsComponent :post="post" />
   </div>
@@ -21,17 +24,18 @@ import QuotedPostComponent from './QuotedPostComponent.vue';
 import PostButtonsComponent from './PostButtonsComponent.vue';
 import ParentPostLinkComponent from './ParentPostLinkComponent.vue';
 import NoContentComponent from '../general/NoContentComponent.vue';
+import _ from 'lodash';
 
 defineProps({
   post: {
     type: Object,
     required: true
   },
-  isComment: {
+  isProfilePage: {
     type: Boolean,
     default: false
   },
-  isProfilePage: {
+  isThreadPage: {
     type: Boolean,
     default: false
   }

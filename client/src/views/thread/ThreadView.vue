@@ -1,9 +1,10 @@
 <template>
   <LoadingComponent v-if="isFetchingPost" />
   <div v-else>
-    <div class="md:w-fit md:mx-auto mb-5">
-      <PostComponent :post="post" />
-    </div>
+    <!-- <div class="md:w-fit md:mx-auto mb-5">
+      <PostComponent :post="post" :is-thread-page="true" />
+    </div> -->
+    <PostWithParentsComponent :post="post" />
     <div v-if="!post.isDeleted" class="flex gap-5 sm:flex-row flex-col mx-auto w-fit mb-5">
       <PostFormComponent :modal-id="`${post._id}-comment`" :parent-post-id="post._id">
         <button class="btn btn-wide btn-accent uppercase">
@@ -29,13 +30,13 @@
       :is-fetching-top="isFetchingCommentsTop"
       :is-no-content="!hasNextPageBottom"
       :no-content-message="comments.length === 0 ? 'No comments yet!' : 'No more comments!'"
-      :style="post.isDeleted ? 'height: 65vh' : 'height: 42vh'"
+      :style="post.isDeleted ? 'height: 65vh' : 'height: 38vh'"
     >
       <PostComponent
         v-for="comment in comments"
         :key="comment._id"
         :post="comment"
-        :is-comment="true"
+        :is-thread-page="true"
       />
     </BiDirectionalInfiniteScrollListComponent>
     <AlertComponent
@@ -59,6 +60,7 @@ import {
   BiDirectionalInfiniteScrollListComponent
 } from '@/components';
 import { socket } from '@/config/wsClient';
+import PostWithParentsComponent from '@/components/post/PostWithParentsComponent.vue';
 
 const store = useThreadPageStore();
 

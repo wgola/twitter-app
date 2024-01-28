@@ -9,7 +9,8 @@ const {
   deletePostEndpoint,
   getNewPostsEndpoint,
   getNewFollowsPostEndpoint,
-  getNewPostCommentsEndpoint
+  getNewPostCommentsEndpoint,
+  getPostWithParentsEndpoint
 } = require('../controllers');
 
 const router = express.Router();
@@ -33,5 +34,7 @@ router.delete('/:postId', deletePostEndpoint);
 router.get('/:postId/comments', getPostCommentsEndpoint);
 
 router.get('/:postId/newComments', getNewPostCommentsEndpoint);
+
+router.get('/:postId/parents', getPostWithParentsEndpoint);
 
 module.exports = router;
