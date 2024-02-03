@@ -41,6 +41,7 @@
       </ul>
     </div>
     <div class="navbar-end">
+      <ThemeToggleComponent />
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
@@ -86,6 +87,7 @@ import { onMounted } from 'vue';
 import { useUserStore } from '@/stores';
 import avatar from '@/assets/avatar.png';
 import SearchPeopleComponent from './SearchPeopleComponent.vue';
+import ThemeToggleComponent from './ThemeToggleComponent.vue';
 
 const store = useUserStore();
 const router = useRouter();

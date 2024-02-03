@@ -24,8 +24,6 @@ import {
   dislikePostRequest,
   editPostRequest,
   deletePostRequest,
-  getMainNewPostsRequest,
-  getPostNewCommentsRequest,
   getPostCommentsRequest,
   getPostParentsRequest
 } from './post.service';
@@ -52,8 +50,6 @@ export {
   searchUsersRequest,
   editPostRequest,
   deletePostRequest,
-  getMainNewPostsRequest,
-  getPostNewCommentsRequest,
   getPostCommentsRequest,
   getPostParentsRequest
 };

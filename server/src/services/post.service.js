@@ -4,8 +4,17 @@ const {
   Types: { ObjectId }
 } = require('mongoose');
 
-const getPosts = async (page, limit, timestamp) => {
+const getPosts = async (page, limit, timestamp, fetchNew) => {
   try {
+    if (fetchNew) {
+      const postsAggregation = await FormattedPost.paginate(
+        { createdAt: { $gt: timestamp }, isDeleted: false },
+        { page, limit, sort: { createdAt: 1 } }
+      );
+
+      return postsAggregation;
+    }
+
     const postsAggregation = await FormattedPost.paginate(
       { createdAt: { $lt: timestamp }, isDeleted: false },
       { page, limit }
@@ -19,24 +28,22 @@ const getPosts = async (page, limit, timestamp) => {
   }
 };
 
-const getNewPosts = async (page, limit, timestamp) => {
-  try {
-    const postsAggregation = await FormattedPost.paginate(
-      { createdAt: { $gt: timestamp }, isDeleted: false },
-      { page, limit, sort: { createdAt: 1 } }
-    );
-
-    return postsAggregation;
-  } catch (error) {
-    LOG.error(error.message);
-
-    throw new Error(`Error getting posts: ${error.message}`);
-  }
-};
-
-const getFollowsPosts = async (username, page, limit, timestamp) => {
+const getFollowsPosts = async (username, page, limit, timestamp, fetchNew) => {
   try {
     const { follows } = await User.findOne({ username });
+
+    if (fetchNew) {
+      const postsAggregation = await FormattedPost.paginate(
+        {
+          'author.username': { $in: follows },
+          createdAt: { $gt: timestamp },
+          isDeleted: false
+        },
+        { page, limit, sort: { createdAt: 1 } }
+      );
+
+      return postsAggregation;
+    }
 
     const postsAggregation = await FormattedPost.paginate(
       {
@@ -45,27 +52,6 @@ const getFollowsPosts = async (username, page, limit, timestamp) => {
         isDeleted: false
       },
       { page, limit }
-    );
-
-    return postsAggregation;
-  } catch (error) {
-    LOG.error(error.message);
-
-    throw new Error(`Error getting posts: ${error.message}`);
-  }
-};
-
-const getNewFollowsPosts = async (username, page, limit, timestamp) => {
-  try {
-    const { follows } = await User.findOne({ username });
-
-    const postsAggregation = await FormattedPost.paginate(
-      {
-        'author.username': { $in: follows },
-        createdAt: { $gt: timestamp },
-        isDeleted: false
-      },
-      { page, limit, sort: { createdAt: 1 } }
     );
 
     return postsAggregation;
@@ -118,26 +104,20 @@ const getUserLikes = async (username, page, limit, timestamp) => {
   }
 };
 
-const getPostComments = async (postId, page, limit, timestamp) => {
+const getPostComments = async (postId, page, limit, timestamp, fetchNew) => {
   try {
+    if (fetchNew) {
+      const postComments = await FormattedPost.paginate(
+        { parentPostId: postId, createdAt: { $gt: timestamp }, isDeleted: false },
+        { page, limit, sort: { createdAt: 1 } }
+      );
+
+      return postComments;
+    }
+
     const postComments = await FormattedPost.paginate(
       { parentPostId: postId, createdAt: { $lt: timestamp }, isDeleted: false },
       { page, limit }
-    );
-
-    return postComments;
-  } catch (error) {
-    LOG.error(error.message);
-
-    throw new Error(`Error getting post comments: ${error.message}`);
-  }
-};
-
-const getNewPostComments = async (postId, page, limit, timestamp) => {
-  try {
-    const postComments = await FormattedPost.paginate(
-      { parentPostId: postId, createdAt: { $gt: timestamp }, isDeleted: false },
-      { page, limit, sort: { createdAt: 1 } }
     );
 
     return postComments;
@@ -304,8 +284,5 @@ module.exports = {
   getFollowsPosts,
   editPost,
   deletePost,
-  getNewPosts,
-  getNewFollowsPosts,
-  getNewPostComments,
   getPostParents
 };

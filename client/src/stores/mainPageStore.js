@@ -1,4 +1,4 @@
-import { getMainNewPostsRequest, getMainPostsRequest } from '@/services';
+import { getMainPostsRequest } from '@/services';
 import { defineStore, storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
 import _ from 'lodash';
@@ -27,26 +27,28 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
       currentPageBottom.value,
       5,
       timestampBottom.value,
-      onlyFollowedPosts.value
+      onlyFollowedPosts.value,
+      false
     );
 
     if (error) {
       return;
     }
 
-    isFetchingBottom.value = false;
     fetchedPosts.value = _.concat(fetchedPosts.value, data.docs);
     hasNextPageBottom.value = data.hasNextPage;
+    isFetchingBottom.value = false;
     currentPageBottom.value++;
   };
 
   const loadMorePostsTop = async () => {
     isFetchingTop.value = true;
-    const { data, error } = await getMainNewPostsRequest(
+    const { data, error } = await getMainPostsRequest(
       currentPageTop.value,
       5,
       timestampTop.value,
-      onlyFollowedPosts.value
+      onlyFollowedPosts.value,
+      true
     );
 
     if (error) {
@@ -80,7 +82,9 @@ export const useMainPageStore = defineStore('mainPageStore', () => {
       (onlyFollowedPosts.value && _.includes(currentUser.value.follows, username)) ||
       !onlyFollowedPosts.value
     ) {
-      timestampTop.value = new Date(fetchedPosts.value[0].createdAt).getTime();
+      timestampTop.value = fetchedPosts.value[0]
+        ? new Date(fetchedPosts.value[0].createdAt).getTime()
+        : new Date().getTime();
       currentPageTop.value = 1;
       hasNextPageTop.value = true;
       newPostsCount.value++;

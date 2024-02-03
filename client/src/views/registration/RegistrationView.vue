@@ -53,18 +53,18 @@ const onSubmit = handleSubmit(async ({ username, password, firstname, surname })
 
   const user = { username, password, firstname, surname };
 
-  const result = await registerUserRequest(user);
+  const { error } = await registerUserRequest(user);
 
-  if (result.error) {
+  if (error) {
     registeringMessage.value = {
       isError: true,
       message: 'An error occurred while registering user!'
     };
+  } else {
+    registeringMessage.value = {
+      isError: false,
+      message: 'Account registered succesfully, you can log in now!'
+    };
   }
-
-  registeringMessage.value = {
-    isError: false,
-    message: 'Account registered succesfully, you can log in now!'
-  };
 });
 </script>

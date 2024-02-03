@@ -62,11 +62,14 @@ const { handleSubmit, isSubmitting, resetForm } = useForm({
 });
 
 const onSubmit = handleSubmit(async (values) => {
+  errorMessage.value = '';
+
   const newContent = values.content;
 
   const { error } = await editPostRequest(postId, newContent);
 
   if (error) {
+    errorMessage.value = 'Error editing post!';
     return;
   }
 

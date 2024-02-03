@@ -67,9 +67,9 @@ onMounted(() => {
 
   watch(
     bottom,
-    (newValue) => {
+    async (newValue) => {
       if (newValue && canLoadMoreBottom()) {
-        loadMoreDataBottom();
+        await loadMoreDataBottom();
       }
     },
     { immediate: true }

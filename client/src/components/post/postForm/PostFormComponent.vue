@@ -58,6 +58,8 @@ const errorMessage = ref('');
 const { handleSubmit, isSubmitting, resetForm } = useForm({ validationSchema });
 
 const onSubmit = handleSubmit(async (values) => {
+  errorMessage.value = '';
+
   const newPost = {
     parentPostId,
     quotedPostId: quotedPost ? quotedPost._id : null,
@@ -67,6 +69,7 @@ const onSubmit = handleSubmit(async (values) => {
   const { data, error } = await createPostRequest(newPost);
 
   if (error) {
+    errorMessage.value = 'Error when creating new post!';
     return;
   }
 

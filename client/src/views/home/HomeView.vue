@@ -76,11 +76,11 @@ const showAlert = ref(false);
 
 onMounted(() => {
   socket.emit('join-room', 'main-page');
-  refresh();
 });
 
 onUnmounted(() => {
   socket.emit('leave-room', 'main-page');
+  refresh();
 });
 
 watch(newPostsCount, () => {

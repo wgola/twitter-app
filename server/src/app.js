@@ -48,11 +48,11 @@ app.get('/api', (_req, res) => {
 });
 
 if (process.env.NODE_ENV === 'prod') {
-  const path = __dirname + '/views';
+  const path = __dirname + '/public';
 
   app.use(express.static(path));
 
-  app.get('/', (_req, res) => {
+  app.get('/*', (_req, res) => {
     res.sendFile(path + '/index.html');
   });
 }

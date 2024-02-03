@@ -1,4 +1,4 @@
-import { getPostByIdRequest, getPostCommentsRequest, getPostNewCommentsRequest } from '@/services';
+import { getPostByIdRequest, getPostCommentsRequest } from '@/services';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import _ from 'lodash';
@@ -39,7 +39,8 @@ export const useThreadPageStore = defineStore('threadPageStore', () => {
       post.value._id,
       currentPageBottom.value,
       5,
-      timestampBottom.value
+      timestampBottom.value,
+      false
     );
 
     if (error) {
@@ -55,11 +56,12 @@ export const useThreadPageStore = defineStore('threadPageStore', () => {
   const loadMoreCommentsTop = async () => {
     isFetchingCommentsTop.value = true;
 
-    const { data, error } = await getPostNewCommentsRequest(
+    const { data, error } = await getPostCommentsRequest(
       post.value._id,
       currentPageTop.value,
       5,
-      timestampTop.value
+      timestampTop.value,
+      true
     );
 
     if (error) {
@@ -87,7 +89,9 @@ export const useThreadPageStore = defineStore('threadPageStore', () => {
   };
 
   socket.on('new-comment', () => {
-    timestampTop.value = new Date(comments.value[0].createdAt).getTime();
+    timestampTop.value = comments.value[0]
+      ? new Date(comments.value[0].createdAt).getTime()
+      : new Date().getTime();
     currentPageTop.value = 1;
     hasNextPageTop.value = true;
     newCommentsCount.value++;

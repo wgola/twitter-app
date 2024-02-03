@@ -1,9 +1,6 @@
 <template>
   <LoadingComponent v-if="isFetchingPost" />
   <div v-else>
-    <!-- <div class="md:w-fit md:mx-auto mb-5">
-      <PostComponent :post="post" :is-thread-page="true" />
-    </div> -->
     <PostWithParentsComponent :post="post" />
     <div v-if="!post.isDeleted" class="flex gap-5 sm:flex-row flex-col mx-auto w-fit mb-5">
       <PostFormComponent :modal-id="`${post._id}-comment`" :parent-post-id="post._id">

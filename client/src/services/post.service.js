@@ -8,11 +8,16 @@ export const createPostRequest = async (post) => {
   return await wrapper(request);
 };
 
-export const getMainPostsRequest = async (page, limit, timestamp, isOnlyFollows) => {
+export const getMainPostsRequest = async (page, limit, timestamp, isOnlyFollows, isNew) => {
+  const params = {
+    page,
+    limit,
+    timestamp,
+    new: isNew
+  };
+
   const request = async () =>
-    await apiClient.get(
-      `/api/posts${isOnlyFollows ? '/follows' : ''}?page=${page}&limit=${limit}&timestamp=${timestamp}`
-    );
+    await apiClient.get(`/api/posts${isOnlyFollows ? '/follows' : ''}`, { params });
 
   return await wrapper(request);
 };
@@ -23,11 +28,15 @@ export const getPostByIdRequest = async (postId) => {
   return await wrapper(request);
 };
 
-export const getPostCommentsRequest = async (postId, page, limit, timestamp) => {
-  const request = async () =>
-    await apiClient.get(
-      `/api/posts/${postId}/comments?page=${page}&limit=${limit}&timestamp=${timestamp}`
-    );
+export const getPostCommentsRequest = async (postId, page, limit, timestamp, isNew) => {
+  const params = {
+    page,
+    limit,
+    timestamp,
+    new: isNew
+  };
+
+  const request = async () => await apiClient.get(`/api/posts/${postId}/comments`, { params });
 
   return await wrapper(request);
 };
@@ -52,27 +61,13 @@ export const deletePostRequest = async (postId) => {
   return await wrapper(request);
 };
 
-export const getMainNewPostsRequest = async (page, limit, timestamp, isOnlyFollows) => {
-  const request = async () =>
-    await apiClient.get(
-      `/api/posts/new${isOnlyFollows ? '/follows' : ''}?page=${page}&limit=${limit}&timestamp=${timestamp}`
-    );
-
-  return await wrapper(request);
-};
-
-export const getPostNewCommentsRequest = async (postId, page, limit, timestamp) => {
-  const request = async () =>
-    await apiClient.get(
-      `/api/posts/${postId}/newComments?page=${page}&limit=${limit}&timestamp=${timestamp}`
-    );
-
-  return await wrapper(request);
-};
-
 export const getPostParentsRequest = async (postId, page, limit) => {
-  const request = async () =>
-    await apiClient.get(`/api/posts/${postId}/parents?page=${page}&limit=${limit}`);
+  const params = {
+    page,
+    limit
+  };
+
+  const request = async () => await apiClient.get(`/api/posts/${postId}/parents`, { params });
 
   return await wrapper(request);
 };

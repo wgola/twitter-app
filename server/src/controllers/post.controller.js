@@ -6,9 +6,6 @@ const {
   getFollowsPosts,
   editPost,
   deletePost,
-  getNewPosts,
-  getNewFollowsPosts,
-  getNewPostComments,
   getPostParents
 } = require('../services');
 
@@ -29,22 +26,9 @@ const getPostsEndpoint = async (req, res) => {
     const page = req.query.page || 1;
     const limit = req.query.limit || 10;
     const timestamp = req.query.timestamp || new Date().getTime();
+    const fetchNew = req.query.new === 'true' || false;
 
-    const posts = await getPosts(page, limit, timestamp);
-
-    return res.status(200).json(posts);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-};
-
-const getNewPostsEndpoint = async (req, res) => {
-  try {
-    const page = req.query.page || 1;
-    const limit = req.query.limit || 10;
-    const timestamp = req.query.timestamp || new Date().getTime();
-
-    const posts = await getNewPosts(page, limit, timestamp);
+    const posts = await getPosts(page, limit, timestamp, fetchNew);
 
     return res.status(200).json(posts);
   } catch (error) {
@@ -57,22 +41,9 @@ const getFollowsPostEndpoint = async (req, res) => {
     const page = req.query.page || 1;
     const limit = req.query.limit || 10;
     const timestamp = req.query.timestamp || new Date().getTime();
+    const fetchNew = req.query.new === 'true' || false;
 
-    const posts = await getFollowsPosts(req.user.username, page, limit, timestamp);
-
-    return res.status(200).json(posts);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-};
-
-const getNewFollowsPostEndpoint = async (req, res) => {
-  try {
-    const page = req.query.page || 1;
-    const limit = req.query.limit || 10;
-    const timestamp = req.query.timestamp || new Date().getTime();
-
-    const posts = await getNewFollowsPosts(req.user.username, page, limit, timestamp);
+    const posts = await getFollowsPosts(req.user.username, page, limit, timestamp, fetchNew);
 
     return res.status(200).json(posts);
   } catch (error) {
@@ -86,23 +57,9 @@ const getPostCommentsEndpoint = async (req, res) => {
     const page = req.query.page || 1;
     const limit = req.query.limit || 10;
     const timestamp = req.query.timestamp || new Date().getTime();
+    const fetchNew = req.query.new === 'true' || false;
 
-    const posts = await getPostComments(postId, page, limit, timestamp);
-
-    return res.status(200).json(posts);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-};
-
-const getNewPostCommentsEndpoint = async (req, res) => {
-  try {
-    const postId = req.params.postId;
-    const page = req.query.page || 1;
-    const limit = req.query.limit || 10;
-    const timestamp = req.query.timestamp || new Date().getTime();
-
-    const posts = await getNewPostComments(postId, page, limit, timestamp);
+    const posts = await getPostComments(postId, page, limit, timestamp, fetchNew);
 
     return res.status(200).json(posts);
   } catch (error) {
@@ -172,8 +129,5 @@ module.exports = {
   getFollowsPostEndpoint,
   editPostEndpoint,
   deletePostEndpoint,
-  getNewPostsEndpoint,
-  getNewFollowsPostEndpoint,
-  getNewPostCommentsEndpoint,
   getPostWithParentsEndpoint
 };

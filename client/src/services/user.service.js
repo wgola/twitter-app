@@ -28,15 +28,23 @@ export const getUserDetailsByUsername = async (username) => {
 };
 
 export const getUserFollowersRequest = async (username, page) => {
-  const request = async () =>
-    await apiClient.get(`/api/user/${username}/followers?page=${page}&limit=15`);
+  const params = {
+    page,
+    limit: 15
+  };
+
+  const request = async () => await apiClient.get(`/api/user/${username}/followers`, { params });
 
   return await wrapper(request);
 };
 
 export const getUserFollowingsRequest = async (username, page) => {
-  const request = async () =>
-    await apiClient.get(`/api/user/${username}/following?page=${page}&limit=15`);
+  const params = {
+    page,
+    limit: 15
+  };
+
+  const request = async () => await apiClient.get(`/api/user/${username}/following`, { params });
 
   return await wrapper(request);
 };
@@ -50,22 +58,37 @@ export const unfollowUserRequest = async (username) => {
 };
 
 export const getUserPostsRequest = async (username, page, timestamp) => {
-  const request = async () =>
-    await apiClient.get(`/api/user/${username}/posts?page=${page}&limit=9&timestamp=${timestamp}`);
+  const params = {
+    page,
+    timestamp,
+    limit: 9
+  };
+
+  const request = async () => await apiClient.get(`/api/user/${username}/posts`, { params });
 
   return await wrapper(request);
 };
 
 export const getUserLikesRequest = async (username, page, timestamp) => {
-  const request = async () =>
-    await apiClient.get(`/api/user/${username}/likes?page=${page}&limit=9&timestamp=${timestamp}`);
+  const params = {
+    page,
+    timestamp,
+    limit: 9
+  };
+
+  const request = async () => await apiClient.get(`/api/user/${username}/likes`, { params });
 
   return await wrapper(request);
 };
 
 export const searchUsersRequest = async (username, page) => {
-  const request = async () =>
-    await apiClient.get(`/api/user?username=${username}&page=${page}&limit=9`);
+  const params = {
+    username,
+    page,
+    limit: 9
+  };
+
+  const request = async () => await apiClient.get(`/api/user`, { params });
 
   return await wrapper(request);
 };

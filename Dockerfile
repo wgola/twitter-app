@@ -11,7 +11,7 @@ WORKDIR /app
 COPY server/package.json .
 RUN npm i
 COPY server/ .
-COPY --from=builder /client/dist/ /app/src/views/
+COPY --from=builder /client/dist/ /app/src/public/
 EXPOSE 8080
 
 ENTRYPOINT [ "npm", "run", "prod" ]
